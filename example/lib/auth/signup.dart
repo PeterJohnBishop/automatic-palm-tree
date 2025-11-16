@@ -1,7 +1,7 @@
+import 'package:example/auth/AuthenticationService.dart';
 import 'package:example/auth/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -12,37 +12,35 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   var _isHovering = false;
-
   final _emailFocus = FocusNode();
   final _password = FocusNode();
   final _passwordVerification = FocusNode();
-
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
   final _passwordVerificationTextController = TextEditingController();
+  late UserCredential userCredential;
 
-  final storage = FlutterSecureStorage();
-  String responseMessage = '';
-  bool success = false;
-  late UserCredential credential;
-
-  Future<void> createUser(String email, String password) async {
-    try {
-      credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      final user = credential.user;
-      print(user?.uid);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
-    } catch (e) {
-      print(e);
-    }
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Signup Error"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                _emailTextController.clear();
+                _passwordTextController.clear();
+                _passwordVerificationTextController.clear();
+                Navigator.of(context).pop(); // Close dialog
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -124,7 +122,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       style: TextStyle(color: Colors.black, fontSize: 22),
                       textAlign: TextAlign.center,
                     ),
-                     Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("Already have an account?"),
@@ -132,9 +130,8 @@ class _SignUpFormState extends State<SignUpForm> {
                           onPressed: () {
                             Navigator.of(context).pop(
                               MaterialPageRoute(
-                                builder: (context) => Material(
-                                  child: LoginForm(),
-                                ),
+                                builder: (context) =>
+                                    Material(child: LoginForm()),
                               ),
                             );
                           },
@@ -222,7 +219,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                   
+
                     MouseRegion(
                       onEnter: (_) => setState(() => _isHovering = true),
                       onExit: (_) => setState(() => _isHovering = false),
@@ -240,18 +237,26 @@ class _SignUpFormState extends State<SignUpForm> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        onPressed: () {
-                          createUser(
-                            _emailTextController.text,
-                            _passwordTextController.text,
-                          );
+                        onPressed: () async {
+                          try {
+                            userCredential = await AuthenticationService().createUserAccount(
+                              _emailTextController.text,
+                              _passwordTextController.text,
+                            );
+                          } on FirebaseAuthException catch (e) {
+                            if (!context.mounted) return;
+                            _showErrorDialog(
+                              context,
+                              e.message ?? "Authentication failed.",
+                            );
+                          }
                         },
-                        child: Text("Submit")
+                        child: Text("Submit"),
                       ),
                     ),
 
                     // sign up with google
-                    // sign up with facebook 
+                    // sign up with facebook
                     // sign up with apple
                   ],
                 ),

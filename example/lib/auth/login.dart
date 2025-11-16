@@ -1,7 +1,7 @@
+import 'package:example/auth/AuthenticationService.dart';
 import 'package:example/auth/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -12,31 +12,32 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   var _isHovering = false;
-
   final _emailFocus = FocusNode();
   final _password = FocusNode();
-
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
+  late UserCredential userCredential;
 
-  final storage = FlutterSecureStorage();
-  String responseMessage = '';
-  bool success = false;
-  late UserCredential credential;
-
-  Future<void> authenticateUser(String email, String password) async {
-    try {
-      credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      final user = credential.user;
-      print(user?.uid);
-    } on FirebaseAuthException catch (e) {
-      print(e.code);
-    } catch (e) {
-      print(e);
-    }
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Login Error"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                _emailTextController.clear();
+                _passwordTextController.clear();
+                Navigator.of(context).pop(); // Close dialog
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -125,9 +126,8 @@ class _LoginFormState extends State<LoginForm> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => Material(
-                                  child: SignUpForm(),
-                                ),
+                                builder: (context) =>
+                                    Material(child: SignUpForm()),
                               ),
                             );
                           },
@@ -183,7 +183,6 @@ class _LoginFormState extends State<LoginForm> {
                     const SizedBox(height: 16),
 
                     // send forgot password email
-
                     MouseRegion(
                       onEnter: (_) => setState(() => _isHovering = true),
                       onExit: (_) => setState(() => _isHovering = false),
@@ -201,11 +200,19 @@ class _LoginFormState extends State<LoginForm> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        onPressed: () {
-                          authenticateUser(
-                            _emailTextController.text,
-                            _passwordTextController.text,
-                          );
+                        onPressed: () async {
+                          try {
+                            userCredential = await AuthenticationService().authenticateUser(
+                              _emailTextController.text,
+                              _passwordTextController.text,
+                            );
+                          } on FirebaseAuthException catch (e) {
+                            if (!context.mounted) return;
+                            _showErrorDialog(
+                              context,
+                              e.message ?? "Authentication failed.",
+                            );
+                          }
                         },
                         child: Text("Login"),
                       ),

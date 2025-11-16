@@ -1,4 +1,4 @@
-class Validator {
+class Formvalidation {
   static String? validateName({required String? name}) {
     if (name == null) {
       return null;

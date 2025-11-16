@@ -1,3 +1,4 @@
+import 'package:example/storage/StorageService.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,32 @@ class FileUpload extends StatefulWidget {
 
 class _FileUploadState extends State<FileUpload> {
   List<PlatformFile> selectedFiles = [];
+  final storage = StorageService();
+  double progress = 0.0;
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Upload Error"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  selectedFiles = [];
+                  progress = 0.0;
+                });
+                Navigator.of(context).pop(); // Close dialog
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Future<void> pickFiles() async {
     final result = await FilePicker.platform.pickFiles(
@@ -26,52 +53,6 @@ class _FileUploadState extends State<FileUpload> {
     });
   }
 
-  Future<void> upload(PlatformFile file) async {
-    if (file.bytes == null) {
-      print('No file bytes found — this is required on web.');
-      return;
-    }
-
-    final contentType = lookupMimeType(file.name) ?? 'application/octet-stream';
-
-    final storageRef = FirebaseStorage.instance.ref().child(
-      'uploads/${file.name}',
-    );
-
-    final uploadTask = storageRef.putData(
-      file.bytes!,
-      SettableMetadata(contentType: contentType),
-    );
-
-    uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
-      switch (taskSnapshot.state) {
-        case TaskState.running:
-          final progress =
-              100.0 * (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes);
-          print("Upload is $progress% complete.");
-          break;
-        case TaskState.paused:
-          print("Upload is paused.");
-          break;
-        case TaskState.canceled:
-          print("Upload was canceled");
-          break;
-        case TaskState.error:
-          // Handle unsuccessful uploads
-          break;
-        case TaskState.success:
-          // Handle successful uploads on complete
-          // ...
-          break;
-      }
-    });
-
-    final snapshot = await uploadTask.whenComplete(() {});
-
-    final downloadUrl = await snapshot.ref.getDownloadURL();
-    print('Uploaded. URL: $downloadUrl');
-  }
-
   void removeFile(int index) {
     setState(() {
       selectedFiles.removeAt(index);
@@ -80,7 +61,22 @@ class _FileUploadState extends State<FileUpload> {
 
   Future<void> uploadFiles(List<PlatformFile> files) async {
     for (final file in files) {
-      await upload(file);
+      try {
+        final url = await storage.upload(
+          file,
+          onProgress: (p) {
+            setState(() {
+              progress = p;
+            });
+          },
+        );
+        print("Download URL: $url");
+      } catch (e) {
+        _showErrorDialog(
+          context,
+          'Error uploading ${file.name}: ${e.toString()}',
+        );
+      }
     }
   }
 
