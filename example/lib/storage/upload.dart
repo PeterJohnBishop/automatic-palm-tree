@@ -86,21 +86,20 @@ class _FileUploadState extends State<FileUpload> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          ElevatedButton.icon(
-            onPressed: () {
-              pickFiles();
-            },
-            icon: const Icon(Icons.insert_drive_file), 
-            label: const Text('Select Files'), 
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton.icon(
+            onPressed: pickFiles,
+            icon: const Icon(Icons.insert_drive_file),
+            label: const Text('Select Files'),
           ),
+        ),
 
-          const SizedBox(height: 20),
-
-          Expanded(
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: selectedFiles.isEmpty
                 ? const Center(child: Text("No files selected."))
                 : ListView.builder(
@@ -126,15 +125,18 @@ class _FileUploadState extends State<FileUpload> {
                     },
                   ),
           ),
+        ),
 
-          ElevatedButton(
-            onPressed: () {
-              selectedFiles.isEmpty ? null : uploadFiles;
-            },
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            onPressed: selectedFiles.isEmpty
+                ? null
+                : () => uploadFiles(selectedFiles),
             child: const Text("Upload Files"),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

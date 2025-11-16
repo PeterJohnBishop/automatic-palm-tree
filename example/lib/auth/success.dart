@@ -1,3 +1,4 @@
+import 'package:example/storage/upload.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -11,30 +12,25 @@ class SuccessView extends StatefulWidget {
 }
 
 class _SuccessViewState extends State<SuccessView> {
-
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Email: ${widget.currentUser.email}'),
-            // email verified indicator
-            // resend email verification
-            // update email address
-            OutlinedButton(
-              onPressed: () {
-                logout();
-              },
-              child: const Text('Sign Out'),
-            )
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Email: ${widget.currentUser.email}'),
+
+          OutlinedButton(onPressed: logout, child: const Text('Sign Out')),
+
+          Expanded(
+            child: FileUpload(), // <-- FIX HERE
+          ),
+        ],
       ),
     );
   }
