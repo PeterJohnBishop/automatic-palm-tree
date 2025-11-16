@@ -1,4 +1,5 @@
 import 'package:example/auth/entry.dart';
+import 'package:example/storage/upload.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: Scaffold(
-        body: EntryView(),
+        body: FileUpload(),
       ),
     );
   }
