@@ -1,3 +1,4 @@
+import 'package:example/auth/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -25,11 +26,14 @@ class _LoginFormState extends State<LoginForm> {
 
   Future<void> authenticateUser(String email, String password) async {
     try {
-      credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-            final user = credential.user;
+      credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      final user = credential.user;
       print(user?.uid);
     } on FirebaseAuthException catch (e) {
-       print(e.code);
+      print(e.code);
     } catch (e) {
       print(e);
     }
@@ -38,10 +42,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   void initState() {
     super.initState();
-    for (var node in [
-      _emailFocus,
-      _password,
-    ]) {
+    for (var node in [_emailFocus, _password]) {
       node.addListener(() => setState(() {}));
     }
   }
@@ -116,6 +117,24 @@ class _LoginFormState extends State<LoginForm> {
                       style: TextStyle(color: Colors.black, fontSize: 22),
                       textAlign: TextAlign.center,
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Don't have an account?"),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Material(
+                                  child: SignUpForm(),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text("SignUp"),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 24),
 
                     // Email
@@ -163,6 +182,8 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     const SizedBox(height: 16),
 
+                    // send forgot password email
+
                     MouseRegion(
                       onEnter: (_) => setState(() => _isHovering = true),
                       onExit: (_) => setState(() => _isHovering = false),
@@ -186,9 +207,13 @@ class _LoginFormState extends State<LoginForm> {
                             _passwordTextController.text,
                           );
                         },
-                        child: success ? Text("Success!") : Text("Submit"),
+                        child: Text("Login"),
                       ),
                     ),
+
+                    // sign in with google
+                    // sign in with facebook
+                    // sign in with apple
                   ],
                 ),
               ),

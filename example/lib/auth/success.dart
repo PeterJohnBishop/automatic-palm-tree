@@ -24,6 +24,9 @@ class _SuccessViewState extends State<SuccessView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Email: ${widget.currentUser.email}'),
+            // email verified indicator
+            // resend email verification
+            // update email address
             OutlinedButton(
               onPressed: () {
                 logout();

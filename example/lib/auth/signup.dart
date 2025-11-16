@@ -1,3 +1,4 @@
+import 'package:example/auth/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -27,8 +28,10 @@ class _SignUpFormState extends State<SignUpForm> {
 
   Future<void> createUser(String email, String password) async {
     try {
-      credential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       final user = credential.user;
       print(user?.uid);
     } on FirebaseAuthException catch (e) {
@@ -45,11 +48,7 @@ class _SignUpFormState extends State<SignUpForm> {
   @override
   void initState() {
     super.initState();
-    for (var node in [
-      _emailFocus,
-      _password,
-      _passwordVerification,
-    ]) {
+    for (var node in [_emailFocus, _password, _passwordVerification]) {
       node.addListener(() => setState(() {}));
     }
   }
@@ -124,6 +123,24 @@ class _SignUpFormState extends State<SignUpForm> {
                       "SignUp",
                       style: TextStyle(color: Colors.black, fontSize: 22),
                       textAlign: TextAlign.center,
+                    ),
+                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Already have an account?"),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(
+                              MaterialPageRoute(
+                                builder: (context) => Material(
+                                  child: LoginForm(),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text("Login"),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 24),
 
@@ -205,7 +222,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       ),
                     ),
                     const SizedBox(height: 24),
-
+                   
                     MouseRegion(
                       onEnter: (_) => setState(() => _isHovering = true),
                       onExit: (_) => setState(() => _isHovering = false),
@@ -229,9 +246,13 @@ class _SignUpFormState extends State<SignUpForm> {
                             _passwordTextController.text,
                           );
                         },
-                        child: success ? Text("Success!") : Text("Submit"),
+                        child: Text("Submit")
                       ),
                     ),
+
+                    // sign up with google
+                    // sign up with facebook 
+                    // sign up with apple
                   ],
                 ),
               ),
