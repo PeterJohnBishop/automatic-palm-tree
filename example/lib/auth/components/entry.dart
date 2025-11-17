@@ -1,4 +1,4 @@
-import 'package:example/auth/success.dart';
+import 'package:example/auth/components/success.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';

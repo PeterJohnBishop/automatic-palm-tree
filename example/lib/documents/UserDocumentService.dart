@@ -10,6 +10,8 @@ class UserDocument {
   final String city;
   final String state;
   final String zip;
+  final DateTime dateCreated;
+  final DateTime dateUpdated;
 
   UserDocument({
     required this.id,
@@ -21,11 +23,13 @@ class UserDocument {
     required this.city,
     required this.state,
     required this.zip,
+    required this.dateCreated,
+    required this.dateUpdated,
   });
 
-  factory UserDocument.fromJson(Map<String, dynamic> json) {
+  factory UserDocument.fromJson(Map<String, dynamic> json, String documentId) {
     return UserDocument(
-      id: json['id'],
+      id: documentId,
       name: json['name'],
       email: json['email'],
       phone: json['phone'],
@@ -34,6 +38,8 @@ class UserDocument {
       city: json['city'],
       state: json['state'],
       zip: json['zip'],
+      dateCreated: (json['dateCreated'] as Timestamp).toDate(),
+      dateUpdated: (json['dateUpdated'] as Timestamp).toDate(),
     );
   }
 
@@ -46,13 +52,14 @@ class UserDocument {
     "city": city,
     "state": state,
     "zip": zip,
+    'dateCreated': Timestamp.fromDate(dateCreated),
+    'dateUpdated': Timestamp.fromDate(dateUpdated),
   };
 }
 
 class UserDocumentService {
-  final CollectionReference _usersRef = FirebaseFirestore.instance.collection(
-    'users',
-  );
+  final CollectionReference _usersRef =
+      FirebaseFirestore.instance.collection('users');
 
   Future<UserDocument> createUserDocument(UserDocument user) async {
     final data = {
@@ -64,15 +71,23 @@ class UserDocumentService {
       'city': user.city,
       'state': user.state,
       'zip': user.zip,
+      'dateCreated': FieldValue.serverTimestamp(),
+      'dateUpdated': FieldValue.serverTimestamp(),
     };
 
     try {
       DocumentReference docRef = await _usersRef.add(data);
       DocumentSnapshot snapshot = await docRef.get();
-      return UserDocument.fromJson({
-        "id": docRef.id,
-        ...snapshot.data() as Map<String, dynamic>,
-      });
+
+      final json = snapshot.data() as Map<String, dynamic>;
+      return UserDocument.fromJson(
+        {
+          ...json,
+          'dateCreated': json['dateCreated'] ?? Timestamp.now(),
+          'dateUpdated': json['dateUpdated'] ?? Timestamp.now(),
+        },
+        docRef.id,
+      );
     } catch (e) {
       throw Exception('Failed to create user: $e');
     }
@@ -80,12 +95,18 @@ class UserDocumentService {
 
   Future<UserDocument?> getUser(String id) async {
     try {
-      DocumentSnapshot docRef = await _usersRef.doc(id).get();
-      if (!docRef.exists) return null;
-      return UserDocument.fromJson({
-        "id": docRef.id,
-        ...docRef.data() as Map<String, dynamic>,
-      });
+      DocumentSnapshot doc = await _usersRef.doc(id).get();
+      if (!doc.exists) return null;
+
+      final json = doc.data() as Map<String, dynamic>;
+      return UserDocument.fromJson(
+        {
+          ...json,
+          'dateCreated': json['dateCreated'] ?? Timestamp.now(),
+          'dateUpdated': json['dateUpdated'] ?? Timestamp.now(),
+        },
+        doc.id,
+      );
     } catch (e) {
       throw Exception('Failed to get user: $e');
     }
@@ -93,13 +114,18 @@ class UserDocumentService {
 
   Future<List<UserDocument>> getAllUsers() async {
     try {
-      final snapshot = await _usersRef.get();
+      QuerySnapshot snapshot = await _usersRef.get();
 
       return snapshot.docs.map((doc) {
-        return UserDocument.fromJson({
-          "id": doc.id,
-          ...doc.data() as Map<String, dynamic>,
-        });
+        final json = doc.data() as Map<String, dynamic>;
+        return UserDocument.fromJson(
+          {
+            ...json,
+            'dateCreated': json['dateCreated'] ?? Timestamp.now(),
+            'dateUpdated': json['dateUpdated'] ?? Timestamp.now(),
+          },
+          doc.id,
+        );
       }).toList();
     } catch (e) {
       throw Exception('Failed to get users: $e');
@@ -108,15 +134,18 @@ class UserDocumentService {
 
   Future<void> updateUser(UserDocument user) async {
     try {
-      await _usersRef.doc(user.id).update(user.toJson());
+      await _usersRef.doc(user.id).update({
+        ...user.toJson(),
+        'dateUpdated': FieldValue.serverTimestamp(),
+      });
     } catch (e) {
       throw Exception('Failed to update user: $e');
     }
   }
 
-  Future<void> deleteUser(String id) {
+  Future<void> deleteUser(String id) async {
     try {
-      return _usersRef.doc(id).delete();
+      await _usersRef.doc(id).delete();
     } catch (e) {
       throw Exception('Failed to delete user: $e');
     }

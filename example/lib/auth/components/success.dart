@@ -1,4 +1,4 @@
-import 'package:example/storage/upload.dart';
+import 'package:example/storage/components/upload.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
