@@ -23,9 +23,22 @@ class _SuccessViewState extends State<SuccessView> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Email: ${widget.currentUser.email}'),
-
-          OutlinedButton(onPressed: logout, child: const Text('Sign Out')),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsetsGeometry.all(8),
+                child: Text('${widget.currentUser.email}'),
+              ),
+              Padding(
+                padding: EdgeInsetsGeometry.all(8),
+                child: OutlinedButton(
+                  onPressed: logout,
+                  child: const Text('Sign Out'),
+                ),
+              ),
+            ],
+          ),
 
           Expanded(
             child: FileUpload(), // <-- FIX HERE

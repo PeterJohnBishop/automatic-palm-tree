@@ -94,15 +94,6 @@ class _FileUploadState extends State<FileUpload> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ElevatedButton.icon(
-            onPressed: pickFiles,
-            icon: const Icon(Icons.insert_drive_file),
-            label: const Text('Select Files'),
-          ),
-        ),
-
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -142,15 +133,27 @@ class _FileUploadState extends State<FileUpload> {
                   ),
           ),
         ),
-
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ElevatedButton(
-            onPressed: selectedFiles.isEmpty
-                ? null
-                : () => uploadFiles(selectedFiles),
-            child: const Text("Upload Files"),
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton.icon(
+                onPressed: pickFiles,
+                icon: const Icon(Icons.insert_drive_file),
+                label: const Text('Select Files'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: selectedFiles.isEmpty
+                    ? null
+                    : () => uploadFiles(selectedFiles),
+                child: const Text("Upload Files"),
+              ),
+            ),
+          ],
         ),
       ],
     );
