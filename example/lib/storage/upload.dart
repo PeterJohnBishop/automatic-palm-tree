@@ -13,6 +13,10 @@ class FileUpload extends StatefulWidget {
 
 class _FileUploadState extends State<FileUpload> {
   List<PlatformFile> selectedFiles = [];
+  bool isUploading = false;
+  String uploadingFile = "";
+  List<String> uploaded = [];
+  List<String> urls = [];
   final storage = StorageService();
   double progress = 0.0;
 
@@ -61,6 +65,10 @@ class _FileUploadState extends State<FileUpload> {
 
   Future<void> uploadFiles(List<PlatformFile> files) async {
     for (final file in files) {
+      setState(() {
+        uploadingFile = file.name;
+        isUploading = true;
+      });
       try {
         final url = await storage.upload(
           file,
@@ -70,14 +78,16 @@ class _FileUploadState extends State<FileUpload> {
             });
           },
         );
-        print("Download URL: $url");
-      } catch (e) {
-        _showErrorDialog(
-          context,
-          'Error uploading ${file.name}: ${e.toString()}',
-        );
+        urls.add(url);
+        uploaded.add(file.name);
+      } on FirebaseException catch (e) {
+        if (!context.mounted) return;
+        _showErrorDialog(context, e.message ?? 'Error uploading ${file.name}');
       }
     }
+    setState(() {
+      isUploading = false;
+    });
   }
 
   @override
@@ -109,13 +119,23 @@ class _FileUploadState extends State<FileUpload> {
                           subtitle: Text(
                             "${(file.size / 1024).toStringAsFixed(2)} KB",
                           ),
-                          trailing: IconButton(
-                            icon: const Icon(
-                              Icons.cancel_rounded,
-                              color: Colors.black,
-                            ),
-                            onPressed: () => removeFile(index),
-                          ),
+                          trailing: () {
+                            if (isUploading && file.name == uploadingFile) {
+                              return Text('${progress.toString()}%');
+                            }
+
+                            if (uploaded.contains(file.name)) {
+                              return const Text("100%");
+                            }
+
+                            return IconButton(
+                              icon: const Icon(
+                                Icons.cancel_rounded,
+                                color: Colors.black,
+                              ),
+                              onPressed: () => removeFile(index),
+                            );
+                          }(),
                         ),
                       );
                     },
