@@ -13,8 +13,8 @@ class SignUpForm extends StatefulWidget {
 class _SignUpFormState extends State<SignUpForm> {
   var _isHovering = false;
   final _emailFocus = FocusNode();
-  final _password = FocusNode();
-  final _passwordVerification = FocusNode();
+  final _passwordFocus = FocusNode();
+  final _passwordVerificationFocus = FocusNode();
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
   final _passwordVerificationTextController = TextEditingController();
@@ -46,7 +46,7 @@ class _SignUpFormState extends State<SignUpForm> {
   @override
   void initState() {
     super.initState();
-    for (var node in [_emailFocus, _password, _passwordVerification]) {
+    for (var node in [_emailFocus, _passwordFocus, _passwordVerificationFocus]) {
       node.addListener(() => setState(() {}));
     }
   }
@@ -54,8 +54,8 @@ class _SignUpFormState extends State<SignUpForm> {
   @override
   void dispose() {
     _emailFocus.dispose();
-    _password.dispose();
-    _passwordVerification.dispose();
+    _passwordFocus.dispose();
+    _passwordVerificationFocus.dispose();
     super.dispose();
   }
 
@@ -174,14 +174,14 @@ class _SignUpFormState extends State<SignUpForm> {
                     Container(
                       decoration: shadow,
                       child: TextField(
-                        focusNode: _password,
+                        focusNode: _passwordFocus,
                         controller: _passwordTextController,
                         obscureText: true,
                         cursorColor: Colors.black,
                         style: const TextStyle(color: Colors.black),
                         decoration: _passwordTextController.text.isNotEmpty
-                            ? inputDecoration('', _password.hasFocus)
-                            : inputDecoration('Password', _password.hasFocus),
+                            ? inputDecoration('', _passwordFocus.hasFocus)
+                            : inputDecoration('Password', _passwordFocus.hasFocus),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -190,7 +190,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     Container(
                       decoration: shadow,
                       child: TextFormField(
-                        focusNode: _passwordVerification,
+                        focusNode: _passwordVerificationFocus,
                         controller: _passwordVerificationTextController,
                         obscureText: true,
                         cursorColor: Colors.black,
@@ -200,11 +200,11 @@ class _SignUpFormState extends State<SignUpForm> {
                             _passwordVerificationTextController.text.isNotEmpty
                             ? inputDecoration(
                                 '',
-                                _passwordVerification.hasFocus,
+                                _passwordVerificationFocus.hasFocus,
                               )
                             : inputDecoration(
                                 'Verify Password',
-                                _passwordVerification.hasFocus,
+                                _passwordVerificationFocus.hasFocus,
                               ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserDocument {
   final String id; // <-- Firestore document ID
+  final String image;
   final String name;
   final String email;
   final String phone;
@@ -15,6 +16,7 @@ class UserDocument {
 
   UserDocument({
     required this.id,
+    required this.image,
     required this.name,
     required this.email,
     required this.phone,
@@ -30,6 +32,7 @@ class UserDocument {
   factory UserDocument.fromJson(Map<String, dynamic> json, String documentId) {
     return UserDocument(
       id: documentId,
+      image: json['image'],
       name: json['name'],
       email: json['email'],
       phone: json['phone'],
@@ -45,6 +48,7 @@ class UserDocument {
 
   Map<String, dynamic> toJson() => {
     "name": name,
+    "image": image,
     "email": email,
     "phone": phone,
     "address1": address1,
@@ -64,6 +68,7 @@ class UserDocumentService {
   Future<UserDocument> createUserDocument(UserDocument user) async {
     final data = {
       'name': user.name,
+      'image': user.image,
       'email': user.email,
       'phone': user.phone,
       'address1': user.address1,
@@ -109,6 +114,31 @@ class UserDocumentService {
       );
     } catch (e) {
       throw Exception('Failed to get user: $e');
+    }
+  }
+
+  Future<UserDocument?> getUserByEmail(String email) async {
+    try {
+      QuerySnapshot snapshot = await _usersRef
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+
+      if (snapshot.docs.isEmpty) return null;
+
+      final doc = snapshot.docs.first;
+      final json = doc.data() as Map<String, dynamic>;
+
+      return UserDocument.fromJson(
+        {
+          ...json,
+          'dateCreated': json['dateCreated'] ?? Timestamp.now(),
+          'dateUpdated': json['dateUpdated'] ?? Timestamp.now(),
+        },
+        doc.id,
+      );
+    } catch (e) {
+      throw Exception('Failed to get user by email: $e');
     }
   }
 
