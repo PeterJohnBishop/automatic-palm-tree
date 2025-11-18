@@ -56,6 +56,14 @@ final FirebaseStorage _storage = FirebaseStorage.instance;
     }
   }
 
+  Future<FilePickerResult?> pickFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      withData: true,
+    );
+    return result;
+  }
+
   Future<List<PlatformFile>> pickFiles() async {
     final result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
