@@ -44,49 +44,9 @@ class _FileUploadState extends State<FileUpload> {
     );
   }
 
-  Future<void> pickFiles() async {
-    final result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      withData: true,
-    );
-
-    if (result == null) return;
-
-    setState(() {
-      selectedFiles.addAll(result.files);
-    });
-  }
-
   void removeFile(int index) {
     setState(() {
       selectedFiles.removeAt(index);
-    });
-  }
-
-  Future<void> uploadFiles(List<PlatformFile> files) async {
-    for (final file in files) {
-      setState(() {
-        uploadingFile = file.name;
-        isUploading = true;
-      });
-      try {
-        final url = await storage.upload(
-          file,
-          onProgress: (p) {
-            setState(() {
-              progress = p;
-            });
-          },
-        );
-        urls.add(url);
-        uploaded.add(file.name);
-      } on FirebaseException catch (e) {
-        if (!context.mounted) return;
-        _showErrorDialog(context, e.message ?? 'Error uploading ${file.name}');
-      }
-    }
-    setState(() {
-      isUploading = false;
     });
   }
 
@@ -139,7 +99,17 @@ class _FileUploadState extends State<FileUpload> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton.icon(
-                onPressed: pickFiles,
+                onPressed: () async {
+                  try {
+                    var files = await StorageService().pickFiles(true);
+                    setState(() {
+                      selectedFiles.addAll(files);
+                    });
+                  } catch (e) {
+                    if (!mounted) return;
+                    _showErrorDialog(context, e.toString());
+                  }
+                },
                 icon: const Icon(Icons.insert_drive_file),
                 label: const Text('Select Files'),
               ),
@@ -149,7 +119,35 @@ class _FileUploadState extends State<FileUpload> {
               child: ElevatedButton(
                 onPressed: selectedFiles.isEmpty
                     ? null
-                    : () => uploadFiles(selectedFiles),
+                    : () async {
+                        for (final file in selectedFiles) {
+                          setState(() {
+                            uploadingFile = file.name;
+                            isUploading = true;
+                          });
+                          try {
+                            final url = await StorageService().upload(
+                              file,
+                              onProgress: (p) {
+                                setState(() {
+                                  progress = p;
+                                });
+                              },
+                            );
+                            urls.add(url);
+                            uploaded.add(file.name);
+                          } on FirebaseException catch (e) {
+                            if (!context.mounted) return;
+                            _showErrorDialog(
+                              context,
+                              e.message ?? 'Error uploading ${file.name}',
+                            );
+                          }
+                          setState(() {
+                            isUploading = false;
+                          });
+                        }
+                      },
                 child: const Text("Upload Files"),
               ),
             ),

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/auth/AuthenticationService.dart';
 import 'package:example/documents/user/UserDocumentService.dart';
+import 'package:example/storage/StorageService.dart';
+import 'package:example/storage/components/circularImagePicker.dart';
 import 'package:flutter/material.dart';
 
 class CreateUser extends StatefulWidget {
@@ -27,6 +29,9 @@ class _CreateUserState extends State<CreateUser> {
   final _stateTextController = TextEditingController();
   final _zipTextController = TextEditingController();
   late UserDocument profile;
+  bool isUploading = false;
+  late String imageUrl = "";
+  double progress = 0.0;
 
   void _showErrorDialog(BuildContext context, String message) {
     showDialog(
@@ -53,6 +58,33 @@ class _CreateUserState extends State<CreateUser> {
         );
       },
     );
+  }
+
+  Future<void> onUploadPressed() async {
+    try {
+      var file = await StorageService().pickFiles(false);
+      setState(() {
+        isUploading = true;
+      });
+      var url = await StorageService().upload(
+        file[0],
+        onProgress: (p) {
+          setState(() {
+            progress = p;
+          });
+        },
+      );
+      setState(() {
+        print(url);
+        imageUrl = url;
+      });
+    } on FirebaseException catch (e) {
+      if (!context.mounted) return;
+      _showErrorDialog(context, e.message ?? 'Error uploading!');
+    }
+    setState(() {
+      isUploading = false;
+    });
   }
 
   @override
@@ -148,6 +180,16 @@ class _CreateUserState extends State<CreateUser> {
                     ),
                     const SizedBox(height: 24),
 
+                    Center(
+                      child: isUploading
+                          ? Text('${progress.toString()}%')
+                          : CircularImagePicker(
+                              imageUrl: imageUrl,
+                              onUploadPressed: onUploadPressed,
+                            ),
+                    ),
+                    const SizedBox(height: 24),
+
                     Container(
                       decoration: shadow,
                       child: TextField(
@@ -239,7 +281,7 @@ class _CreateUserState extends State<CreateUser> {
                         style: const TextStyle(color: Colors.black),
                         decoration: _stateTextController.text.isNotEmpty
                             ? inputDecoration('', _stateFocus.hasFocus)
-                            : inputDecoration('Password', _stateFocus.hasFocus),
+                            : inputDecoration('State', _stateFocus.hasFocus),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -254,7 +296,7 @@ class _CreateUserState extends State<CreateUser> {
                         style: const TextStyle(color: Colors.black),
                         decoration: _zipTextController.text.isNotEmpty
                             ? inputDecoration('', _zipFocus.hasFocus)
-                            : inputDecoration('Password', _zipFocus.hasFocus),
+                            : inputDecoration('Zipcode', _zipFocus.hasFocus),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -281,7 +323,7 @@ class _CreateUserState extends State<CreateUser> {
                               AuthenticationService().currentUser;
                           final user = UserDocument(
                             id: "",
-                            image: "",
+                            image: imageUrl != "" ? imageUrl : "",
                             name: _nameTextController.text,
                             email: currentUser?.email ?? "",
                             phone: _phoneTextController.text,

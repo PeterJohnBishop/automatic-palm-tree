@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'automatic-palm-tree.firebasestorage.app',
     measurementId: 'G-TVP7V98CEQ',
   );
+
 }
