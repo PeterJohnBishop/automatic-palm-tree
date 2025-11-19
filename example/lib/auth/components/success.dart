@@ -43,7 +43,7 @@ class _SuccessViewState extends State<SuccessView> {
   @override
   void initState() {
     super.initState();
-    newUser();      // <-- RUN HERE ONCE
+    newUser(); // <-- RUN HERE ONCE
   }
 
   Future<void> newUser() async {
@@ -53,10 +53,9 @@ class _SuccessViewState extends State<SuccessView> {
       );
 
       setState(() {
-        newProfile = user == null;   // true = show CreateUser
+        newProfile = user == null; // true = show CreateUser
         isLoading = false;
       });
-
     } on FirebaseException catch (e) {
       setState(() => isLoading = false);
 
@@ -70,29 +69,59 @@ class _SuccessViewState extends State<SuccessView> {
     return Scaffold(
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+          : Stack(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Text('${widget.currentUser.email}'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: OutlinedButton(
-                        onPressed: logout,
-                        child: const Text('Sign Out'),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text('${widget.currentUser.email}'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: OutlinedButton(
+                            onPressed: logout,
+                            child: const Text('Sign Out'),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-
-                Expanded(
+                Center(
                   child: newProfile
-                      ? CreateUser()      // <-- will now display properly
+                      ? SingleChildScrollView(
+                          child: Padding(
+                            padding: EdgeInsetsGeometry.all(25),
+                            child: SizedBox(
+                              width: 400, // <-- FIXED SIZE for debugging
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors
+                                      .white, // needed for shadow visibility
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 20,
+                                      spreadRadius: 2,
+                                      offset: Offset(0, 10),
+                                    ),
+                                  ],
+                                ),
+                                child: ClipRRect(
+                                  // keeps nice rounded content
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: CreateUser(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
                       : const Text("Success"),
                 ),
               ],
@@ -100,5 +129,3 @@ class _SuccessViewState extends State<SuccessView> {
     );
   }
 }
-
-

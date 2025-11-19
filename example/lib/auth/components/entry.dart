@@ -25,7 +25,30 @@ class _EntryViewState extends State<EntryView> {
         }
 
         if (!snapshot.hasData) {
-          return const LoginForm();
+          return Center(
+  child: Container(
+    width: 400,        // <-- FIXED SIZE for debugging
+    height: 400,
+    child: Container(
+    decoration: BoxDecoration(
+      color: Colors.white,                  // needed for shadow visibility
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black26,
+          blurRadius: 20,
+          spreadRadius: 2,
+          offset: Offset(0, 10),
+        ),
+      ],
+    ),
+    child: ClipRRect(                       // keeps nice rounded content
+      borderRadius: BorderRadius.circular(16),
+      child: LoginForm(),
+    ),
+  ),
+  ),
+);
         }
 
         final user = snapshot.data!;

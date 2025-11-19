@@ -165,192 +165,189 @@ class _CreateUserState extends State<CreateUser> {
         return Center(
           child: SizedBox(
             width: formWidth,
-            child: SingleChildScrollView(
-              child: Container(
-                padding: padding,
-                color: Colors.transparent,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text(
-                      "Profile",
-                      style: TextStyle(color: Colors.black, fontSize: 22),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 24),
+            child: Container(
+              padding: padding,
+              color: Colors.transparent,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    "Profile",
+                    style: TextStyle(color: Colors.black, fontSize: 22),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
 
-                    Center(
-                      child: isUploading
-                          ? Text('${progress.toString()}%')
-                          : CircularImagePicker(
-                              imageUrl: imageUrl,
-                              onUploadPressed: onUploadPressed,
+                  Center(
+                    child: isUploading
+                        ? Text('${progress.toString()}%')
+                        : CircularImagePicker(
+                            imageUrl: imageUrl,
+                            onUploadPressed: onUploadPressed,
+                          ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  Container(
+                    decoration: shadow,
+                    child: TextField(
+                      focusNode: _nameFocus,
+                      controller: _nameTextController,
+                      obscureText: false,
+                      cursorColor: Colors.black,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: _nameTextController.text.isNotEmpty
+                          ? inputDecoration('', _nameFocus.hasFocus)
+                          : inputDecoration('Name', _nameFocus.hasFocus),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  Container(
+                    decoration: shadow,
+                    child: TextField(
+                      focusNode: _phoneFocus,
+                      controller: _phoneTextController,
+                      obscureText: false,
+                      cursorColor: Colors.black,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: _phoneTextController.text.isNotEmpty
+                          ? inputDecoration('', _phoneFocus.hasFocus)
+                          : inputDecoration('Phone', _phoneFocus.hasFocus),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  Container(
+                    decoration: shadow,
+                    child: TextField(
+                      focusNode: _address1Focus,
+                      controller: _address1TextController,
+                      obscureText: false,
+                      cursorColor: Colors.black,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: _address1TextController.text.isNotEmpty
+                          ? inputDecoration('', _address1Focus.hasFocus)
+                          : inputDecoration(
+                              'Address 1',
+                              _address1Focus.hasFocus,
                             ),
                     ),
-                    const SizedBox(height: 24),
+                  ),
+                  const SizedBox(height: 16),
 
-                    Container(
-                      decoration: shadow,
-                      child: TextField(
-                        focusNode: _nameFocus,
-                        controller: _nameTextController,
-                        obscureText: false,
-                        cursorColor: Colors.black,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: _nameTextController.text.isNotEmpty
-                            ? inputDecoration('', _nameFocus.hasFocus)
-                            : inputDecoration('Name', _nameFocus.hasFocus),
-                      ),
+                  Container(
+                    decoration: shadow,
+                    child: TextField(
+                      focusNode: _address2Focus,
+                      controller: _address2TextController,
+                      obscureText: false,
+                      cursorColor: Colors.black,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: _address2TextController.text.isNotEmpty
+                          ? inputDecoration('', _address2Focus.hasFocus)
+                          : inputDecoration(
+                              'Address 2',
+                              _address2Focus.hasFocus,
+                            ),
                     ),
-                    const SizedBox(height: 16),
+                  ),
+                  const SizedBox(height: 16),
 
-                    Container(
-                      decoration: shadow,
-                      child: TextField(
-                        focusNode: _phoneFocus,
-                        controller: _phoneTextController,
-                        obscureText: false,
-                        cursorColor: Colors.black,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: _phoneTextController.text.isNotEmpty
-                            ? inputDecoration('', _phoneFocus.hasFocus)
-                            : inputDecoration('Phone', _phoneFocus.hasFocus),
-                      ),
+                  Container(
+                    decoration: shadow,
+                    child: TextField(
+                      focusNode: _cityFocus,
+                      controller: _cityTextController,
+                      obscureText: false,
+                      cursorColor: Colors.black,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: _cityTextController.text.isNotEmpty
+                          ? inputDecoration('', _cityFocus.hasFocus)
+                          : inputDecoration('Password', _cityFocus.hasFocus),
                     ),
-                    const SizedBox(height: 16),
+                  ),
+                  const SizedBox(height: 16),
 
-                    Container(
-                      decoration: shadow,
-                      child: TextField(
-                        focusNode: _address1Focus,
-                        controller: _address1TextController,
-                        obscureText: false,
-                        cursorColor: Colors.black,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: _address1TextController.text.isNotEmpty
-                            ? inputDecoration('', _address1Focus.hasFocus)
-                            : inputDecoration(
-                                'Address 1',
-                                _address1Focus.hasFocus,
-                              ),
-                      ),
+                  Container(
+                    decoration: shadow,
+                    child: TextField(
+                      focusNode: _stateFocus,
+                      controller: _stateTextController,
+                      obscureText: false,
+                      cursorColor: Colors.black,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: _stateTextController.text.isNotEmpty
+                          ? inputDecoration('', _stateFocus.hasFocus)
+                          : inputDecoration('State', _stateFocus.hasFocus),
                     ),
-                    const SizedBox(height: 16),
+                  ),
+                  const SizedBox(height: 16),
 
-                    Container(
-                      decoration: shadow,
-                      child: TextField(
-                        focusNode: _address2Focus,
-                        controller: _address2TextController,
-                        obscureText: false,
-                        cursorColor: Colors.black,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: _address2TextController.text.isNotEmpty
-                            ? inputDecoration('', _address2Focus.hasFocus)
-                            : inputDecoration(
-                                'Address 2',
-                                _address2Focus.hasFocus,
-                              ),
-                      ),
+                  Container(
+                    decoration: shadow,
+                    child: TextField(
+                      focusNode: _zipFocus,
+                      controller: _zipTextController,
+                      obscureText: true,
+                      cursorColor: Colors.black,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: _zipTextController.text.isNotEmpty
+                          ? inputDecoration('', _zipFocus.hasFocus)
+                          : inputDecoration('Zipcode', _zipFocus.hasFocus),
                     ),
-                    const SizedBox(height: 16),
+                  ),
+                  const SizedBox(height: 16),
 
-                    Container(
-                      decoration: shadow,
-                      child: TextField(
-                        focusNode: _cityFocus,
-                        controller: _cityTextController,
-                        obscureText: false,
-                        cursorColor: Colors.black,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: _cityTextController.text.isNotEmpty
-                            ? inputDecoration('', _cityFocus.hasFocus)
-                            : inputDecoration('Password', _cityFocus.hasFocus),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    Container(
-                      decoration: shadow,
-                      child: TextField(
-                        focusNode: _stateFocus,
-                        controller: _stateTextController,
-                        obscureText: false,
-                        cursorColor: Colors.black,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: _stateTextController.text.isNotEmpty
-                            ? inputDecoration('', _stateFocus.hasFocus)
-                            : inputDecoration('State', _stateFocus.hasFocus),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    Container(
-                      decoration: shadow,
-                      child: TextField(
-                        focusNode: _zipFocus,
-                        controller: _zipTextController,
-                        obscureText: true,
-                        cursorColor: Colors.black,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: _zipTextController.text.isNotEmpty
-                            ? inputDecoration('', _zipFocus.hasFocus)
-                            : inputDecoration('Zipcode', _zipFocus.hasFocus),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    MouseRegion(
-                      onEnter: (_) => setState(() => _isHovering = true),
-                      onExit: (_) => setState(() => _isHovering = false),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: _isHovering
-                              ? Colors.black
-                              : Colors.grey,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 14,
-                            horizontal: 32,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                  MouseRegion(
+                    onEnter: (_) => setState(() => _isHovering = true),
+                    onExit: (_) => setState(() => _isHovering = false),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: _isHovering
+                            ? Colors.black
+                            : Colors.grey,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                          horizontal: 32,
                         ),
-                        onPressed: () async {
-                          final currentUser =
-                              AuthenticationService().currentUser;
-                          final user = UserDocument(
-                            id: "",
-                            image: imageUrl != "" ? imageUrl : "",
-                            name: _nameTextController.text,
-                            email: currentUser?.email ?? "",
-                            phone: _phoneTextController.text,
-                            address1: _address1TextController.text,
-                            address2: _address2TextController.text,
-                            city: _cityTextController.text,
-                            state: _stateTextController.text,
-                            zip: _zipTextController.text,
-                            dateCreated: DateTime.now(),
-                            dateUpdated: DateTime.now(),
-                          );
-                          try {
-                            profile = await UserDocumentService()
-                                .createUserDocument(user);
-                          } on FirebaseException catch (e) {
-                            if (!context.mounted) return;
-                            _showErrorDialog(
-                              context,
-                              e.message ?? "Authentication failed.",
-                            );
-                          }
-                        },
-                        child: Text("Save"),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
+                      onPressed: () async {
+                        final currentUser = AuthenticationService().currentUser;
+                        final user = UserDocument(
+                          id: "",
+                          image: imageUrl != "" ? imageUrl : "",
+                          name: _nameTextController.text,
+                          email: currentUser?.email ?? "",
+                          phone: _phoneTextController.text,
+                          address1: _address1TextController.text,
+                          address2: _address2TextController.text,
+                          city: _cityTextController.text,
+                          state: _stateTextController.text,
+                          zip: _zipTextController.text,
+                          dateCreated: DateTime.now(),
+                          dateUpdated: DateTime.now(),
+                        );
+                        try {
+                          profile = await UserDocumentService()
+                              .createUserDocument(user);
+                        } on FirebaseException catch (e) {
+                          if (!context.mounted) return;
+                          _showErrorDialog(
+                            context,
+                            e.message ?? "Authentication failed.",
+                          );
+                        }
+                      },
+                      child: Text("Save"),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

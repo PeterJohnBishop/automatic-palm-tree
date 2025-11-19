@@ -127,7 +127,30 @@ class _LoginFormState extends State<LoginForm> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    Material(child: SignUpForm()),
+                                    Material(child: Center(
+  child: Container(
+    width: 400,        // <-- FIXED SIZE for debugging
+    height: 400,
+    child: Container(
+    decoration: BoxDecoration(
+      color: Colors.white,                  // needed for shadow visibility
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black26,
+          blurRadius: 20,
+          spreadRadius: 2,
+          offset: Offset(0, 10),
+        ),
+      ],
+    ),
+    child: ClipRRect(                       // keeps nice rounded content
+      borderRadius: BorderRadius.circular(16),
+      child: SignUpForm()
+    ),
+    ),
+  ),),
+      ),
                               ),
                             );
                           },
@@ -202,10 +225,11 @@ class _LoginFormState extends State<LoginForm> {
                         ),
                         onPressed: () async {
                           try {
-                            userCredential = await AuthenticationService().authenticateUser(
-                              _emailTextController.text,
-                              _passwordTextController.text,
-                            );
+                            userCredential = await AuthenticationService()
+                                .authenticateUser(
+                                  _emailTextController.text,
+                                  _passwordTextController.text,
+                                );
                           } on FirebaseAuthException catch (e) {
                             if (!context.mounted) return;
                             _showErrorDialog(
