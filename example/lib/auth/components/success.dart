@@ -75,12 +75,8 @@ class _SuccessViewState extends State<SuccessView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Text('${widget.currentUser.email}'),
-                        ),
                         Padding(
                           padding: const EdgeInsets.all(8),
                           child: OutlinedButton(
