@@ -1,3 +1,4 @@
+import 'package:example/documents/listing/components/manageListing.dart';
 import 'package:example/documents/user/UserDocumentService.dart';
 import 'package:example/documents/user/components/createUser.dart';
 import 'package:example/documents/user/components/presentUser.dart';
@@ -154,7 +155,7 @@ class _SuccessViewState extends State<SuccessView> {
                             ),
                           ),
                         )
-                      : const SizedBox()
+                      : EditListing()
                 ),
               ],
             ),

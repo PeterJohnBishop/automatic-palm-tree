@@ -13,7 +13,8 @@ class ListingDocument {
   final List<String> liked;
   final List<String> loved;
   final List<String> comments;
-  final List<String> paragraphs;
+  final String description;
+  final String cover;
   final List<String> assets;
   final DateTime dateCreated;
   final DateTime dateUpdated;
@@ -31,7 +32,8 @@ class ListingDocument {
     required this.liked,
     required this.loved,
     required this.comments,
-    required this.paragraphs,
+    required this.description,
+    required this.cover,
     required this.assets,
     required this.dateCreated,
     required this.dateUpdated,
@@ -52,7 +54,8 @@ class ListingDocument {
       liked: List<String>.from(json['liked'] ?? []),
       loved: List<String>.from(json['loved'] ?? []),
       comments: List<String>.from(json['comments'] ?? []),
-      paragraphs: List<String>.from(json['paragraphs'] ?? []),
+      description: json['description'] ?? '',
+      cover: json['cover'] ?? '',
       assets: List<String>.from(json['assets'] ?? []),
       dateCreated: (json['dateCreated'] as Timestamp).toDate(),
       dateUpdated: (json['dateUpdated'] as Timestamp).toDate(),
@@ -72,7 +75,8 @@ class ListingDocument {
       'liked': liked,
       'loved': loved,
       'comments': comments,
-      'paragraphs': paragraphs,
+      'description': description,
+      'cover': cover,
       'assets': assets,
       'dateCreated': Timestamp.fromDate(dateCreated),
       'dateUpdated': Timestamp.fromDate(dateUpdated),
@@ -97,7 +101,8 @@ class ListingDocumentService {
       'liked': listing.liked,
       'loved': listing.loved,
       'comments': listing.comments,
-      'paragraphs': listing.paragraphs,
+      'description': listing.description,
+      'cover': listing.cover,
       'assets': listing.assets,
       'dateCreated': FieldValue.serverTimestamp(),
       'dateUpdated': FieldValue.serverTimestamp(),
