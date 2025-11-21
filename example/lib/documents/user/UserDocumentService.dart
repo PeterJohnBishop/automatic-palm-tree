@@ -6,11 +6,6 @@ class UserDocument {
   final String name;
   final String email;
   final String phone;
-  final String address1;
-  final String address2;
-  final String city;
-  final String state;
-  final String zip;
   final DateTime dateCreated;
   final DateTime dateUpdated;
 
@@ -20,11 +15,6 @@ class UserDocument {
     required this.name,
     required this.email,
     required this.phone,
-    required this.address1,
-    required this.address2,
-    required this.city,
-    required this.state,
-    required this.zip,
     required this.dateCreated,
     required this.dateUpdated,
   });
@@ -36,11 +26,6 @@ class UserDocument {
       name: json['name'],
       email: json['email'],
       phone: json['phone'],
-      address1: json['address1'],
-      address2: json['address2'],
-      city: json['city'],
-      state: json['state'],
-      zip: json['zip'],
       dateCreated: (json['dateCreated'] as Timestamp).toDate(),
       dateUpdated: (json['dateUpdated'] as Timestamp).toDate(),
     );
@@ -51,11 +36,6 @@ class UserDocument {
     "image": image,
     "email": email,
     "phone": phone,
-    "address1": address1,
-    "address2": address2,
-    "city": city,
-    "state": state,
-    "zip": zip,
     'dateCreated': Timestamp.fromDate(dateCreated),
     'dateUpdated': Timestamp.fromDate(dateUpdated),
   };
@@ -71,11 +51,6 @@ class UserDocumentService {
       'image': user.image,
       'email': user.email,
       'phone': user.phone,
-      'address1': user.address1,
-      'address2': user.address2,
-      'city': user.city,
-      'state': user.state,
-      'zip': user.zip,
       'dateCreated': FieldValue.serverTimestamp(),
       'dateUpdated': FieldValue.serverTimestamp(),
     };

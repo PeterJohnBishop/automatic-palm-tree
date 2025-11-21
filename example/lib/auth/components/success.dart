@@ -109,6 +109,19 @@ class _SuccessViewState extends State<SuccessView> {
                         ),
                       ],
                     ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // add listings
+                            // post update
+                            // review messages
+                          ],
+                        )
+                      ],
+                    )
                   ],
                 ),
                 Center(

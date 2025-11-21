@@ -18,18 +18,8 @@ class _CreateUserState extends State<CreateUser> {
   var _isHovering = false;
   final _nameFocus = FocusNode();
   final _phoneFocus = FocusNode();
-  final _address1Focus = FocusNode();
-  final _address2Focus = FocusNode();
-  final _cityFocus = FocusNode();
-  final _stateFocus = FocusNode();
-  final _zipFocus = FocusNode();
   final _nameTextController = TextEditingController();
   final _phoneTextController = TextEditingController();
-  final _address1TextController = TextEditingController();
-  final _address2TextController = TextEditingController();
-  final _cityTextController = TextEditingController();
-  final _stateTextController = TextEditingController();
-  final _zipTextController = TextEditingController();
   late UserDocument profile;
   bool isUploading = false;
   late String imageUrl = "";
@@ -47,11 +37,6 @@ class _CreateUserState extends State<CreateUser> {
               onPressed: () {
                 _nameTextController.clear();
                 _phoneTextController.clear();
-                _address1TextController.clear();
-                _address2TextController.clear();
-                _cityTextController.clear();
-                _stateTextController.clear();
-                _zipTextController.clear();
                 Navigator.of(context).pop(); // Close dialog
               },
               child: const Text("OK"),
@@ -95,11 +80,6 @@ class _CreateUserState extends State<CreateUser> {
     for (var node in [
       _nameFocus,
       _phoneFocus,
-      _address1Focus,
-      _address2Focus,
-      _cityFocus,
-      _stateFocus,
-      _zipFocus,
     ]) {
       node.addListener(() => setState(() {}));
     }
@@ -109,11 +89,6 @@ class _CreateUserState extends State<CreateUser> {
   void dispose() {
     _nameFocus.dispose();
     _phoneFocus.dispose();
-    _address1Focus.dispose();
-    _address2Focus.dispose();
-    _cityFocus.dispose();
-    _stateFocus.dispose();
-    _zipFocus.dispose();
     super.dispose();
   }
 
@@ -221,87 +196,6 @@ class _CreateUserState extends State<CreateUser> {
                   ),
                   const SizedBox(height: 16),
 
-                  Container(
-                    decoration: shadow,
-                    child: TextField(
-                      focusNode: _address1Focus,
-                      controller: _address1TextController,
-                      obscureText: false,
-                      cursorColor: Colors.black,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: _address1TextController.text.isNotEmpty
-                          ? inputDecoration('', _address1Focus.hasFocus)
-                          : inputDecoration(
-                              'Address 1',
-                              _address1Focus.hasFocus,
-                            ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  Container(
-                    decoration: shadow,
-                    child: TextField(
-                      focusNode: _address2Focus,
-                      controller: _address2TextController,
-                      obscureText: false,
-                      cursorColor: Colors.black,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: _address2TextController.text.isNotEmpty
-                          ? inputDecoration('', _address2Focus.hasFocus)
-                          : inputDecoration(
-                              'Address 2',
-                              _address2Focus.hasFocus,
-                            ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  Container(
-                    decoration: shadow,
-                    child: TextField(
-                      focusNode: _cityFocus,
-                      controller: _cityTextController,
-                      obscureText: false,
-                      cursorColor: Colors.black,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: _cityTextController.text.isNotEmpty
-                          ? inputDecoration('', _cityFocus.hasFocus)
-                          : inputDecoration('Password', _cityFocus.hasFocus),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  Container(
-                    decoration: shadow,
-                    child: TextField(
-                      focusNode: _stateFocus,
-                      controller: _stateTextController,
-                      obscureText: false,
-                      cursorColor: Colors.black,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: _stateTextController.text.isNotEmpty
-                          ? inputDecoration('', _stateFocus.hasFocus)
-                          : inputDecoration('State', _stateFocus.hasFocus),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  Container(
-                    decoration: shadow,
-                    child: TextField(
-                      focusNode: _zipFocus,
-                      controller: _zipTextController,
-                      obscureText: true,
-                      cursorColor: Colors.black,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: _zipTextController.text.isNotEmpty
-                          ? inputDecoration('', _zipFocus.hasFocus)
-                          : inputDecoration('Zipcode', _zipFocus.hasFocus),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
                   MouseRegion(
                     onEnter: (_) => setState(() => _isHovering = true),
                     onExit: (_) => setState(() => _isHovering = false),
@@ -327,11 +221,6 @@ class _CreateUserState extends State<CreateUser> {
                           name: _nameTextController.text,
                           email: currentUser?.email ?? "",
                           phone: _phoneTextController.text,
-                          address1: _address1TextController.text,
-                          address2: _address2TextController.text,
-                          city: _cityTextController.text,
-                          state: _stateTextController.text,
-                          zip: _zipTextController.text,
                           dateCreated: DateTime.now(),
                           dateUpdated: DateTime.now(),
                         );

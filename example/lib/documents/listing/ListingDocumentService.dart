@@ -10,6 +10,9 @@ class ListingDocument {
   final double beds;
   final double baths;
   final double sqft;
+  final List<String> liked;
+  final List<String> loved;
+  final List<String> comments;
   final List<String> paragraphs;
   final List<String> assets;
   final DateTime dateCreated;
@@ -25,6 +28,9 @@ class ListingDocument {
     required this.beds,
     required this.baths,
     required this.sqft,
+    required this.liked,
+    required this.loved,
+    required this.comments,
     required this.paragraphs,
     required this.assets,
     required this.dateCreated,
@@ -43,6 +49,9 @@ class ListingDocument {
       beds: (json['beds'] ?? 0).toDouble(),
       baths: (json['baths'] ?? 0).toDouble(),
       sqft: (json['sqft'] ?? 0).toDouble(),
+      liked: List<String>.from(json['liked'] ?? []),
+      loved: List<String>.from(json['loved'] ?? []),
+      comments: List<String>.from(json['comments'] ?? []),
       paragraphs: List<String>.from(json['paragraphs'] ?? []),
       assets: List<String>.from(json['assets'] ?? []),
       dateCreated: (json['dateCreated'] as Timestamp).toDate(),
@@ -60,6 +69,9 @@ class ListingDocument {
       'beds': beds,
       'baths': baths,
       'sqft': sqft,
+      'liked': liked,
+      'loved': loved,
+      'comments': comments,
       'paragraphs': paragraphs,
       'assets': assets,
       'dateCreated': Timestamp.fromDate(dateCreated),
@@ -82,6 +94,9 @@ class ListingDocumentService {
       'beds': listing.beds,
       'baths': listing.baths,
       'sqft': listing.sqft,
+      'liked': listing.liked,
+      'loved': listing.loved,
+      'comments': listing.comments,
       'paragraphs': listing.paragraphs,
       'assets': listing.assets,
       'dateCreated': FieldValue.serverTimestamp(),
