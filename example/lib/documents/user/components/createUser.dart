@@ -6,7 +6,9 @@ import 'package:example/storage/components/circularImagePicker.dart';
 import 'package:flutter/material.dart';
 
 class CreateUser extends StatefulWidget {
-  const CreateUser({super.key});
+  final Function(UserDocument) onUserCreated;
+
+  const CreateUser({super.key, required this.onUserCreated});
 
   @override
   State<CreateUser> createState() => _CreateUserState();
@@ -336,6 +338,7 @@ class _CreateUserState extends State<CreateUser> {
                         try {
                           profile = await UserDocumentService()
                               .createUserDocument(user);
+                          widget.onUserCreated(profile);
                         } on FirebaseException catch (e) {
                           if (!context.mounted) return;
                           _showErrorDialog(

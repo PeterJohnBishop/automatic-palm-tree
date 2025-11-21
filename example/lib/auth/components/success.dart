@@ -1,5 +1,6 @@
 import 'package:example/documents/user/UserDocumentService.dart';
 import 'package:example/documents/user/components/createUser.dart';
+import 'package:example/documents/user/components/presentUser.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -15,6 +16,7 @@ class SuccessView extends StatefulWidget {
 class _SuccessViewState extends State<SuccessView> {
   bool isLoading = true;
   bool newProfile = true;
+  late UserDocument userDocument;
 
   void _showErrorDialog(BuildContext context, String message) {
     showDialog(
@@ -48,19 +50,37 @@ class _SuccessViewState extends State<SuccessView> {
 
   Future<void> newUser() async {
     try {
-      var user = await UserDocumentService().getUserByEmail(
+      var existingUser = await UserDocumentService().getUserByEmail(
         widget.currentUser.email ?? "",
       );
-
-      setState(() {
-        newProfile = user == null; // true = show CreateUser
-        isLoading = false;
-      });
+      if (existingUser != null) {
+        setState(() {
+          newProfile = false;
+          isLoading = false;
+          userDocument = existingUser;
+        });
+      } else {
+        setState(() {
+          newProfile = true;
+          isLoading = false;
+        });
+      }
     } on FirebaseException catch (e) {
       setState(() => isLoading = false);
-
       if (!context.mounted) return;
       _showErrorDialog(context, e.message ?? "Authentication failed.");
+    }
+  }
+
+  void userLoaded(UserDocument userLoaded) {
+    try {
+      setState(() {
+        userDocument = userLoaded;
+        newProfile = false;
+        isLoading = false;
+      });
+    } catch (e) {
+      _showErrorDialog(context, e.toString());
     }
   }
 
@@ -75,8 +95,11 @@ class _SuccessViewState extends State<SuccessView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        newProfile ? 
+                        SizedBox()
+                        : PresentUser(userDocument: userDocument, size: 33),
                         Padding(
                           padding: const EdgeInsets.all(8),
                           child: OutlinedButton(
@@ -112,13 +135,13 @@ class _SuccessViewState extends State<SuccessView> {
                                 child: ClipRRect(
                                   // keeps nice rounded content
                                   borderRadius: BorderRadius.circular(16),
-                                  child: CreateUser(),
+                                  child: CreateUser(onUserCreated: userLoaded),
                                 ),
                               ),
                             ),
                           ),
                         )
-                      : const Text("Success"),
+                      : const SizedBox()
                 ),
               ],
             ),
