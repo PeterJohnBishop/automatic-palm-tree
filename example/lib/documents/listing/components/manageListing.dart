@@ -11,7 +11,32 @@ class EditListing extends StatefulWidget {
 }
 
 class _EditListingState extends State<EditListing> {
-  late ListingDocument listing;
+  String selectedCover = "";
+  List<String> selectedImages = [];
+
+
+  // void saveListing(String selectedCover) {
+  //   setState(() {
+  //     listing = ListingDocument(
+  //       id: "", 
+  //       agent: agent, 
+  //       address1: address1, 
+  //       address2: address2, 
+  //       price: price, 
+  //       status: status, 
+  //       beds: beds, 
+  //       baths: baths, 
+  //       sqft: sqft, 
+  //       liked: liked, 
+  //       loved: loved, 
+  //       comments: comments, 
+  //       description: description, 
+  //       cover: cover, 
+  //       assets: assets, 
+  //       dateCreated: dateCreated, 
+  //       dateUpdated: dateUpdated);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
