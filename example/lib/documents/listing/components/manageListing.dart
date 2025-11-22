@@ -11,32 +11,42 @@ class EditListing extends StatefulWidget {
 }
 
 class _EditListingState extends State<EditListing> {
-  String selectedCover = "";
-  List<String> selectedImages = [];
+  late ListingDocument listing;
+  late String _agent = "";
+  late String _address1 = "";
+  late String _address2 = "";
+  late double _price = 0.0;
+  late String _status = "";
+  late double _beds = 0.0;
+  late double _baths = 0.0;
+  late double _sqft = 0.0;
+  late String _description = "";
+  late String _cover = "";
+  late List<String> _assets = [];
 
 
-  // void saveListing(String selectedCover) {
-  //   setState(() {
-  //     listing = ListingDocument(
-  //       id: "", 
-  //       agent: agent, 
-  //       address1: address1, 
-  //       address2: address2, 
-  //       price: price, 
-  //       status: status, 
-  //       beds: beds, 
-  //       baths: baths, 
-  //       sqft: sqft, 
-  //       liked: liked, 
-  //       loved: loved, 
-  //       comments: comments, 
-  //       description: description, 
-  //       cover: cover, 
-  //       assets: assets, 
-  //       dateCreated: dateCreated, 
-  //       dateUpdated: dateUpdated);
-  //   });
-  // }
+  void _saveListing(String selectedCover) {
+    setState(() {
+      listing = ListingDocument(
+        id: "", 
+        agent: _agent, 
+        address1: _address1, 
+        address2: _address2, 
+        price: _price, 
+        status: _status, 
+        beds: _beds, 
+        baths: _baths, 
+        sqft: _sqft, 
+        liked: [], 
+        loved: [], 
+        comments: [], 
+        description: _description, 
+        cover: _cover, 
+        assets: _assets, 
+        dateCreated: DateTime.now(), 
+        dateUpdated:  DateTime.now());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
