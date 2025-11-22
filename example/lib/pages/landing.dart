@@ -9,42 +9,195 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-
   List<ListingDocument> landingData = [
     ListingDocument(
-      id: "0", 
-      agent: agent, 
-      address1: address1, 
-      address2: address2, 
-      price: price, 
-      status: status, 
-      beds: beds, 
-      baths: baths, 
-      sqft: sqft, 
-      liked: liked, 
-      loved: loved, 
-      comments: comments, 
-      description: description, 
-      cover: cover, 
-      assets: assets, 
-      dateCreated: dateCreated, 
-      dateUpdated: dateUpdated)
+      id: "0",
+      agent: "Peter Bishop",
+      address1: "4378 Sandalwood Dr.",
+      address2: "St. Petersberg, FL 90837",
+      price: 1100000.0,
+      status: "Active",
+      beds: 4,
+      baths: 2.5,
+      sqft: 3472,
+      liked: [],
+      loved: [],
+      comments: [],
+      description:
+          "In a quiet Florida cul-de-sac lined with palm trees and tidy lawns, this standard suburban home sits beneath a bright, sun-washed sky, its stucco exterior painted a warm sandy beige that blends naturally with the coastal landscape. A red-tile roof slopes gently over spacious eaves, shading the wide front windows that look out onto a small, neatly trimmed yard bordered by hibiscus bushes in constant bloom. Inside, cool tiled floors run throughout the open living space, where ceiling fans hum softly against the humid afternoon air. Out back, a screened-in lanai leads to a modest backyard dotted with citrus trees—usually buzzing with the chatter of neighbors grilling, kids riding bikes, and the distant call of seabirds drifting in from the coast just a few miles away.",
+      cover: "/home1/cover.webp",
+      assets: [
+        "/home1/1.webp",
+        "/home1/2.webp",
+        "/home1/3.webp",
+        "/home1/4.webp",
+        "/home1/5.webp",
+        "/home1/6.webp",
+        "/home1/7.webp",
+        "/home1/8.webp",
+        "/home1/9.webp",
+        "/home1/10.webp",
+      ],
+      dateCreated: DateTime.now(),
+      dateUpdated: DateTime.now(),
+    ),
+    ListingDocument(
+      id: "0",
+      agent: "Peter Bishop",
+      address1: "901 Uber St.",
+      address2: "Springfield, OH 12054",
+      price: 380000.00,
+      status: "Active",
+      beds: 4,
+      baths: 5.5,
+      sqft: 4589,
+      liked: [],
+      loved: [],
+      comments: [],
+      description:
+          "In a sleek new Florida development bordered by wetlands and winding bike paths, this modern suburban home stands out with its clean lines and minimalist architecture. The exterior blends smooth white stucco with charcoal-gray metal accents, while large floor-to-ceiling windows reflect the shimmering palm fronds and endless blue sky. Inside, the open-concept layout is anchored by polished concrete floors, recessed lighting, and a floating staircase that leads to a bright lofted second level. The kitchen features matte-black cabinetry and quartz countertops, seamlessly flowing into a living space framed by sliding glass walls that open to a covered patio. Out back, a compact saltwater plunge pool glows softly in the evening heat, surrounded by native grasses that sway in the warm coastal breeze drifting in from nearby lakes and preserves.",
+      cover: "/home2/cover.webp",
+      assets: [
+        "/home2/1.webp",
+        "/home2/2.webp",
+        "/home2/3.webp",
+        "/home2/4.webp",
+        "/home2/5.webp",
+        "/home2/6.webp",
+        "/home2/7.webp",
+        "/home2/8.webp",
+        "/home2/9.webp",
+      ],
+      dateCreated: DateTime.now(),
+      dateUpdated: DateTime.now(),
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: LayoutBuilder(
-      builder: (context, constraints) {
-        final width = constraints.maxWidth;
-        final height = constraints.maxHeight;
+        builder: (context, constraints) {
+          final width = constraints.maxWidth;
+          final height = constraints.maxHeight;
 
-        return SizedBox(
-          height: height,
-          width: width,
-          child: Image.network(src),
-        ),
-      },
+          return SizedBox(
+            height: height,
+            width: width,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: landingData.length,
+                    itemBuilder: (context, index) {
+                      final listing = landingData[index];
+
+                      return Card(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Cover Image
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.asset(
+                                  listing.cover,
+                                  height: 180,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+
+                              const SizedBox(height: 12),
+
+                              // Address
+                              Text(
+                                listing.address1,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                listing.address2,
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+
+                              const SizedBox(height: 10),
+
+                              // Price
+                              Text(
+                                "\$${listing.price.toStringAsFixed(0)}",
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.green,
+                                ),
+                              ),
+
+                              const SizedBox(height: 10),
+
+                              // Specs Row
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.bed,
+                                    size: 18,
+                                    color: Colors.grey[700],
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text("${listing.beds} Beds"),
+
+                                  const SizedBox(width: 16),
+
+                                  Icon(
+                                    Icons.bathtub,
+                                    size: 18,
+                                    color: Colors.grey[700],
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text("${listing.baths} Baths"),
+
+                                  const SizedBox(width: 16),
+
+                                  Icon(
+                                    Icons.square_foot,
+                                    size: 18,
+                                    color: Colors.grey[700],
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text("${listing.sqft} sqft"),
+                                ],
+                              ),
+
+                              const SizedBox(height: 16),
+
+                              // Description
+                              Text(
+                                listing.description,
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:example/auth/components/login.dart';
 import 'package:example/auth/components/success.dart';
+import 'package:example/pages/landing.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
           }
 
           if (!snapshot.hasData) {
-            return LoginForm();
+            return LandingPage();
           }
 
           return SuccessView(currentUser: snapshot.data!);
