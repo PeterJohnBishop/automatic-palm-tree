@@ -62,7 +62,6 @@ class _CreateUserState extends State<CreateUser> {
         },
       );
       setState(() {
-        print(url);
         imageUrl = url;
       });
     } on FirebaseException catch (e) {

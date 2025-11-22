@@ -2,7 +2,10 @@ import 'package:example/documents/listing/ListingDocumentService.dart';
 import 'package:example/documents/listing/components/ListingCover.dart';
 import 'package:example/documents/listing/components/ListingDetails.dart';
 import 'package:example/documents/listing/components/ListingImages.dart';
+import 'package:example/storage/StorageService.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+
 class EditListing extends StatefulWidget {
   const EditListing({super.key});
 
@@ -23,28 +26,104 @@ class _EditListingState extends State<EditListing> {
   late String _description = "";
   late String _cover = "";
   late List<String> _assets = [];
+  double progress = 0.0;
+  bool isUploading = false;
 
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Save Error"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close dialog
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void _saveListing(String selectedCover) {
     setState(() {
       listing = ListingDocument(
-        id: "", 
-        agent: _agent, 
-        address1: _address1, 
-        address2: _address2, 
-        price: _price, 
-        status: _status, 
-        beds: _beds, 
-        baths: _baths, 
-        sqft: _sqft, 
-        liked: [], 
-        loved: [], 
-        comments: [], 
-        description: _description, 
-        cover: _cover, 
-        assets: _assets, 
-        dateCreated: DateTime.now(), 
-        dateUpdated:  DateTime.now());
+        id: "",
+        agent: _agent,
+        address1: _address1,
+        address2: _address2,
+        price: _price,
+        status: _status,
+        beds: _beds,
+        baths: _baths,
+        sqft: _sqft,
+        liked: [],
+        loved: [],
+        comments: [],
+        description: _description,
+        cover: _cover,
+        assets: _assets,
+        dateCreated: DateTime.now(),
+        dateUpdated: DateTime.now(),
+      );
+    });
+  }
+
+  void _saveDetails(
+    String address1,
+    String address2,
+    double price,
+    String status,
+    double beds,
+    double baths,
+    double sqft,
+    String description,
+  ) {
+    setState(() {
+      _address1 = address1;
+      _address2 = address2;
+      _price = price;
+      _status = status;
+      _beds = beds;
+      _baths = baths;
+      _sqft = sqft;
+      _description = description;
+    });
+  }
+
+  void _saveImages(List<String> assets) {
+    setState(() {
+      _assets = assets;
+    });
+  }
+
+  void _saveCover() async {
+    try {
+      var file = await StorageService().pickFiles(false);
+      setState(() {
+        isUploading = true;
+      });
+      var url = await StorageService().upload(
+        file[0],
+        onProgress: (p) {
+          setState(() {
+            progress = p;
+          });
+        },
+      );
+      setState(() {
+        _cover = url;
+      });
+    } on FirebaseException catch (e) {
+      if (!context.mounted) return;
+      _showErrorDialog(context, e.message ?? 'Error uploading!');
+    }
+    setState(() {
+      isUploading = false;
     });
   }
 
@@ -65,7 +144,12 @@ class _EditListingState extends State<EditListing> {
                   children: [
                     Padding(
                       padding: EdgeInsets.all(8),
-                      child: ListingCover(width: width, height: height),
+                      child: ListingCover(
+                        width: width,
+                        height: height,
+                        imageUrl: _cover,
+                        onUploadPressed: _saveCover,
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.all(8),
