@@ -5,11 +5,11 @@ class ListingDocument {
   final String agent; // user.id
   final String address1;
   final String address2;
-  final double price;
+  final String price;
   final String status;
-  final double beds;
-  final double baths;
-  final double sqft;
+  final String beds;
+  final String baths;
+  final String sqft;
   final List<String> liked;
   final List<String> loved;
   final List<String> comments;
@@ -46,11 +46,11 @@ class ListingDocument {
       agent: json['agent'] ?? '',
       address1: json['address1'] ?? '',
       address2: json['address2'] ?? '',
-      price: (json['price'] ?? 0).toDouble(),
+      price: (json['price'] ?? 0),
       status: json['status'] ?? '',
-      beds: (json['beds'] ?? 0).toDouble(),
-      baths: (json['baths'] ?? 0).toDouble(),
-      sqft: (json['sqft'] ?? 0).toDouble(),
+      beds: (json['beds'] ?? 0),
+      baths: (json['baths'] ?? 0),
+      sqft: (json['sqft'] ?? 0),
       liked: List<String>.from(json['liked'] ?? []),
       loved: List<String>.from(json['loved'] ?? []),
       comments: List<String>.from(json['comments'] ?? []),

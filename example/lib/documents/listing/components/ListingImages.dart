@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 class ListingImages extends StatefulWidget {
   final double width;
   final double height;
-  const ListingImages({super.key, required this.width, required this.height});
+  final Function(List<String>) onUploadComplete;
+  const ListingImages({super.key, required this.width, required this.height, required this.onUploadComplete});
 
   @override
   State<ListingImages> createState() => _ListingImagesState();
@@ -187,6 +188,7 @@ class _ListingImagesState extends State<ListingImages> {
                               e.message ?? 'Error uploading ${file.name}',
                             );
                           }
+                          widget.onUploadComplete(urls);
                           setState(() {
                             isUploading = false;
                           });

@@ -3,7 +3,23 @@ import 'package:flutter/material.dart';
 class ListingDetails extends StatefulWidget {
   final double width;
   final double height;
-  const ListingDetails({super.key, required this.width, required this.height});
+  final Function(
+    String address1,
+    String address2,
+    String price,
+    String status,
+    String beds,
+    String baths,
+    String sqft,
+    String description,
+  )
+  onSave;
+  const ListingDetails({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.onSave,
+  });
 
   @override
   State<ListingDetails> createState() => _ListingDetailsState();
@@ -63,6 +79,19 @@ class _ListingDetailsState extends State<ListingDetails> {
     }
   }
 
+  void _triggerSave() {
+    widget.onSave(
+      _address1TextController.text,
+      _address2TextController.text,
+      _priceTextController.text,
+      _statusTextController.text,
+      _bedsTextController.text,
+      _bathsTextController.text,
+      _sqftTextController.text,
+      _descriptionTextController.text,
+    );
+  }
+
   @override
   void dispose() {
     _address1Focus.dispose();
@@ -92,7 +121,7 @@ class _ListingDetailsState extends State<ListingDetails> {
       padding = const EdgeInsets.all(24);
     } else {
       formWidth = width * 0.3; // desktop
-      formHeight = height * 0.8;
+      formHeight = height * 0.815;
       padding = const EdgeInsets.all(10);
     }
 
@@ -151,6 +180,7 @@ class _ListingDetailsState extends State<ListingDetails> {
                               'Address 1',
                               _address1Focus.hasFocus,
                             ),
+                      onChanged: (_) => _triggerSave(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -170,6 +200,7 @@ class _ListingDetailsState extends State<ListingDetails> {
                               'Address 2',
                               _address2Focus.hasFocus,
                             ),
+                      onChanged: (_) => _triggerSave(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -189,6 +220,7 @@ class _ListingDetailsState extends State<ListingDetails> {
                               'Asking Price',
                               _priceFocus.hasFocus,
                             ),
+                      onChanged: (_) => _triggerSave(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -205,6 +237,7 @@ class _ListingDetailsState extends State<ListingDetails> {
                       decoration: _statusTextController.text.isNotEmpty
                           ? inputDecoration('', _statusFocus.hasFocus)
                           : inputDecoration('Status', _statusFocus.hasFocus),
+                      onChanged: (_) => _triggerSave(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -221,6 +254,7 @@ class _ListingDetailsState extends State<ListingDetails> {
                       decoration: _bedsTextController.text.isNotEmpty
                           ? inputDecoration('', _bedsFocus.hasFocus)
                           : inputDecoration('Beds', _bedsFocus.hasFocus),
+                      onChanged: (_) => _triggerSave(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -237,6 +271,7 @@ class _ListingDetailsState extends State<ListingDetails> {
                       decoration: _bathsTextController.text.isNotEmpty
                           ? inputDecoration('', _bathsFocus.hasFocus)
                           : inputDecoration('Baths', _bathsFocus.hasFocus),
+                      onChanged: (_) => _triggerSave(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -253,6 +288,7 @@ class _ListingDetailsState extends State<ListingDetails> {
                       decoration: _sqftTextController.text.isNotEmpty
                           ? inputDecoration('', _sqftFocus.hasFocus)
                           : inputDecoration('Sqft', _sqftFocus.hasFocus),
+                      onChanged: (_) => _triggerSave(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -270,31 +306,10 @@ class _ListingDetailsState extends State<ListingDetails> {
                       decoration: _descriptionTextController.text.isNotEmpty
                           ? inputDecoration('', _descriptionFocus.hasFocus)
                           : inputDecoration('Sqft', _descriptionFocus.hasFocus),
+                      onChanged: (_) => _triggerSave(),
                     ),
                   ),
                   const SizedBox(height: 16),
-
-                  MouseRegion(
-                    onEnter: (_) => setState(() => _isHovering = true),
-                    onExit: (_) => setState(() => _isHovering = false),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: _isHovering
-                            ? Colors.black
-                            : Colors.grey,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 14,
-                          horizontal: 32,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: () {},
-                      child: Text("Save"),
-                    ),
-                  ),
                 ],
               ),
             ),

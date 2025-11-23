@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           }
 
           if (!snapshot.hasData) {
-            return LandingPage();
+            return LoginForm();
           }
 
           return SuccessView(currentUser: snapshot.data!);
