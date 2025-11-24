@@ -51,14 +51,15 @@ class MyApp extends StatelessWidget {
           }
 
           if (!snapshot.hasData) {
-            return LoginForm();
+            return LandingPage();
           }
 
           return SuccessView(currentUser: snapshot.data!);
         },
       ),
       routes: {
-        '/home': (context) => LoginForm() // example: Navigator.pushNamed(context, '/home')
+        '/home': (context) => LandingPage(), // example: Navigator.pushNamed(context, '/home')
+        '/login': (context) => LoginForm()
       },
     );
   }

@@ -9,6 +9,7 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  var _isHovering = false;
   List<ListingDocument> landingData = [
     ListingDocument(
       id: "0",
@@ -111,109 +112,141 @@ class _LandingPageState extends State<LandingPage> {
           final width = constraints.maxWidth;
           final height = constraints.maxHeight;
 
-          return ListView.builder(
-            itemCount: landingData.length,
-            itemBuilder: (context, index) {
-              final listing = landingData[index];
-
-              return SizedBox(
-                height: height * .5, // ← REAL size limit
-                width: width * .3,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
-                          listing.cover,
-                          height: height * 0.4,
-                          width: width * 0.3,
-                          fit: BoxFit.cover,
+          return Column(
+            children: [
+              Row(
+                children: [
+                  MouseRegion(
+                    onEnter: (_) => setState(() => _isHovering = true),
+                    onExit: (_) => setState(() => _isHovering = false),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: _isHovering
+                            ? Colors.black
+                            : Colors.grey,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                          horizontal: 32,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      SizedBox(
-                height: height * .5, // ← REAL size limit
-                width: width * .3,
-                child: Column(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/login');
+                      },
+                      child: Text("Login"),
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                // ← This gives ListView real height
+                child: ListView.builder(
+                  itemCount: landingData.length,
+                  itemBuilder: (context, index) {
+                    final listing = landingData[index];
+
+                    return SizedBox(
+                      height: height * .5, // ← REAL size limit
+                      width: width * .3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 12),
-                            Text(
-                              listing.address1,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.asset(
+                                listing.cover,
+                                height: height * 0.4,
+                                width: width * 0.3,
+                                fit: BoxFit.cover,
                               ),
                             ),
-                            Text(
-                              listing.address2,
-                              style: const TextStyle(color: Colors.grey),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              "\$${listing.price}",
-                              style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.green,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
+                            SizedBox(width: 16),
+                            SizedBox(
+                              height: height * .5, // ← REAL size limit
+                              width: width * .3,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    listing.address1,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    listing.address2,
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "\$${listing.price}",
+                                    style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
 
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.bed,
-                                  size: 18,
-                                  color: Colors.grey[700],
-                                ),
-                                const SizedBox(width: 4),
-                                Text("${listing.beds} Beds"),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.bed,
+                                        size: 18,
+                                        color: Colors.grey[700],
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text("${listing.beds} Beds"),
 
-                                const SizedBox(width: 16),
-                                Icon(
-                                  Icons.bathtub,
-                                  size: 18,
-                                  color: Colors.grey[700],
-                                ),
-                                const SizedBox(width: 4),
-                                Text("${listing.baths} Baths"),
+                                      const SizedBox(width: 16),
+                                      Icon(
+                                        Icons.bathtub,
+                                        size: 18,
+                                        color: Colors.grey[700],
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text("${listing.baths} Baths"),
 
-                                const SizedBox(width: 16),
-                                Icon(
-                                  Icons.square_foot,
-                                  size: 18,
-                                  color: Colors.grey[700],
-                                ),
-                                const SizedBox(width: 4),
-                                Text("${listing.sqft} sqft"),
-                              ],
-                            ),
+                                      const SizedBox(width: 16),
+                                      Icon(
+                                        Icons.square_foot,
+                                        size: 18,
+                                        color: Colors.grey[700],
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text("${listing.sqft} sqft"),
+                                    ],
+                                  ),
 
-                            const SizedBox(height: 16),
+                                  const SizedBox(height: 16),
 
-                            Expanded(
-                              child: Text(
-                                listing.description,
-                                style: const TextStyle(fontSize: 15),
-                                overflow: TextOverflow.fade,
-                                softWrap: true,
+                                  Expanded(
+                                    child: Text(
+                                      listing.description,
+                                      style: const TextStyle(fontSize: 15),
+                                      overflow: TextOverflow.fade,
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+            ],
           );
         },
       ),
