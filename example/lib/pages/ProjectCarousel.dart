@@ -1,4 +1,4 @@
-import 'package:example/documents/listing/components/ImageSlideWidget.dart';
+import 'package:example/pages/ImageSlideWidget.dart';
 import 'package:flutter/material.dart';
 
 class ImageCarousel extends StatefulWidget {

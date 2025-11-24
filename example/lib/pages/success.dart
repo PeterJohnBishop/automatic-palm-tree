@@ -1,7 +1,7 @@
-import 'package:example/documents/listing/components/manageListing.dart';
-import 'package:example/documents/user/UserDocumentService.dart';
-import 'package:example/documents/user/components/createUser.dart';
-import 'package:example/documents/user/components/presentUser.dart';
+import 'package:example/pages/manageListing.dart';
+import 'package:example/pages/UserDocumentService.dart';
+import 'package:example/pages/createUser.dart';
+import 'package:example/pages/presentUser.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

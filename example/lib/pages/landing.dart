@@ -1,4 +1,4 @@
-import 'package:example/documents/listing/ListingDocumentService.dart';
+import 'package:example/pages/ListingDocumentService.dart';
 import 'package:flutter/material.dart';
 
 class LandingPage extends StatefulWidget {
@@ -134,7 +134,7 @@ class _LandingPageState extends State<LandingPage> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/login');
+                        Navigator.pushNamed(context, '/auth');
                       },
                       child: Text("Login"),
                     ),

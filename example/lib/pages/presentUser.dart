@@ -1,5 +1,5 @@
-import 'package:example/documents/user/UserDocumentService.dart';
-import 'package:example/documents/user/components/HoverIconButton.dart';
+import 'package:example/pages/UserDocumentService.dart';
+import 'package:example/pages/HoverIconButton.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 

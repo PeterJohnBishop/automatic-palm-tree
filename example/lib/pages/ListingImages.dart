@@ -1,16 +1,21 @@
-import 'package:example/storage/StorageService.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:example/pages/StorageService.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-class FileUpload extends StatefulWidget {
-  const FileUpload({super.key});
+class ListingImages extends StatefulWidget {
+  final double width;
+  final double height;
+  final Function(List<String>) onUploadComplete;
+  const ListingImages({super.key, required this.width, required this.height, required this.onUploadComplete});
 
   @override
-  State<FileUpload> createState() => _FileUploadState();
+  State<ListingImages> createState() => _ListingImagesState();
 }
 
-class _FileUploadState extends State<FileUpload> {
+class _ListingImagesState extends State<ListingImages> {
+  double width = 0;
+  double height = 0;
   List<PlatformFile> selectedFiles = [];
   bool isUploading = false;
   String uploadingFile = "";
@@ -19,39 +24,56 @@ class _FileUploadState extends State<FileUpload> {
   final storage = StorageService();
   double progress = 0.0;
 
-  void _showErrorDialog(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Upload Error"),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  selectedFiles = [];
-                  progress = 0.0;
-                });
-                Navigator.of(context).pop(); // Close dialog
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void removeFile(int index) {
     setState(() {
       selectedFiles.removeAt(index);
     });
   }
 
+   @override
+  void initState() {
+    super.initState();
+    width = widget.width;
+    height = widget.height;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
+    double formWidth;
+    double formHeight;
+    EdgeInsets padding;
+
+    if (width < 600) {
+      formWidth = width * 0.9; // mobile
+      formHeight = height * 0.9;
+      padding = const EdgeInsets.all(16);
+    } else if (width < 1100) {
+      formWidth = width * 0.7; // tablet
+      formHeight = height * 0.9;
+      padding = const EdgeInsets.all(24);
+    } else {
+      formWidth = width * 0.6; // desktop
+      formHeight = height * 0.4;
+      padding = const EdgeInsets.all(10);
+    }
+
+    return Container(
+      width: formWidth,
+      height: formHeight,
+      // color: Colors.red.withOpacity(0.2),
+      decoration: BoxDecoration(
+        color: Colors.white, // needed for shadow visibility
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 20,
+            spreadRadius: 2,
+            offset: Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Padding(padding: padding, child: Column(
       children: [
         Expanded(
           child: Padding(
@@ -96,7 +118,7 @@ class _FileUploadState extends State<FileUpload> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: padding,
               child: ElevatedButton.icon(
                 onPressed: () async {
                   try {
@@ -105,8 +127,6 @@ class _FileUploadState extends State<FileUpload> {
                       selectedFiles.addAll(files);
                     });
                   } catch (e) {
-                    if (!mounted) return;
-                    _showErrorDialog(context, e.toString());
                   }
                 },
                 icon: const Icon(Icons.insert_drive_file),
@@ -114,7 +134,7 @@ class _FileUploadState extends State<FileUpload> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: padding,
               child: ElevatedButton(
                 onPressed: selectedFiles.isEmpty
                     ? null
@@ -137,11 +157,8 @@ class _FileUploadState extends State<FileUpload> {
                             uploaded.add(file.name);
                           } on FirebaseException catch (e) {
                             if (!context.mounted) return;
-                            _showErrorDialog(
-                              context,
-                              e.message ?? 'Error uploading ${file.name}',
-                            );
                           }
+                          widget.onUploadComplete(urls);
                           setState(() {
                             isUploading = false;
                           });
@@ -153,6 +170,8 @@ class _FileUploadState extends State<FileUpload> {
           ],
         ),
       ],
+    ),
+    ),
     );
   }
 }

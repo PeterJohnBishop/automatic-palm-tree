@@ -1,21 +1,16 @@
-import 'package:example/storage/StorageService.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:example/pages/StorageService.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
-class ListingImages extends StatefulWidget {
-  final double width;
-  final double height;
-  final Function(List<String>) onUploadComplete;
-  const ListingImages({super.key, required this.width, required this.height, required this.onUploadComplete});
+class FileUpload extends StatefulWidget {
+  const FileUpload({super.key});
 
   @override
-  State<ListingImages> createState() => _ListingImagesState();
+  State<FileUpload> createState() => _FileUploadState();
 }
 
-class _ListingImagesState extends State<ListingImages> {
-  double width = 0;
-  double height = 0;
+class _FileUploadState extends State<FileUpload> {
   List<PlatformFile> selectedFiles = [];
   bool isUploading = false;
   String uploadingFile = "";
@@ -54,50 +49,9 @@ class _ListingImagesState extends State<ListingImages> {
     });
   }
 
-   @override
-  void initState() {
-    super.initState();
-    width = widget.width;
-    height = widget.height;
-  }
-
   @override
   Widget build(BuildContext context) {
-    double formWidth;
-    double formHeight;
-    EdgeInsets padding;
-
-    if (width < 600) {
-      formWidth = width * 0.9; // mobile
-      formHeight = height * 0.9;
-      padding = const EdgeInsets.all(16);
-    } else if (width < 1100) {
-      formWidth = width * 0.7; // tablet
-      formHeight = height * 0.9;
-      padding = const EdgeInsets.all(24);
-    } else {
-      formWidth = width * 0.6; // desktop
-      formHeight = height * 0.4;
-      padding = const EdgeInsets.all(10);
-    }
-
-    return Container(
-      width: formWidth,
-      height: formHeight,
-      // color: Colors.red.withOpacity(0.2),
-      decoration: BoxDecoration(
-        color: Colors.white, // needed for shadow visibility
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 20,
-            spreadRadius: 2,
-            offset: Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Padding(padding: padding, child: Column(
+    return Column(
       children: [
         Expanded(
           child: Padding(
@@ -142,7 +96,7 @@ class _ListingImagesState extends State<ListingImages> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: padding,
+              padding: const EdgeInsets.all(16.0),
               child: ElevatedButton.icon(
                 onPressed: () async {
                   try {
@@ -160,7 +114,7 @@ class _ListingImagesState extends State<ListingImages> {
               ),
             ),
             Padding(
-              padding: padding,
+              padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: selectedFiles.isEmpty
                     ? null
@@ -188,7 +142,6 @@ class _ListingImagesState extends State<ListingImages> {
                               e.message ?? 'Error uploading ${file.name}',
                             );
                           }
-                          widget.onUploadComplete(urls);
                           setState(() {
                             isUploading = false;
                           });
@@ -200,8 +153,6 @@ class _ListingImagesState extends State<ListingImages> {
           ],
         ),
       ],
-    ),
-    ),
     );
   }
 }

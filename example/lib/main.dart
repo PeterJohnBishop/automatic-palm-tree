@@ -1,7 +1,4 @@
-import 'package:example/auth/components/login.dart';
-import 'package:example/auth/components/success.dart';
-import 'package:example/pages/landing.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:example/RealEstateApp.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -15,52 +12,12 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  void _showErrorDialog(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Signup Error"),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-          if (snapshot.hasError) {
-            _showErrorDialog(context, 'Something went wrong');
-            return LoginForm();
-          }
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          }
-
-          if (!snapshot.hasData) {
-            return LandingPage();
-          }
-
-          return SuccessView(currentUser: snapshot.data!);
-        },
-      ),
-      routes: {
-        '/home': (context) => LandingPage(), // example: Navigator.pushNamed(context, '/home')
-        '/login': (context) => LoginForm()
-      },
+      debugShowCheckedModeBanner: false,
+      title: "Real Estate",
+      home: RealEstateApp(),
     );
   }
 }
