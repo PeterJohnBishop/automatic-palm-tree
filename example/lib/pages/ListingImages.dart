@@ -32,7 +32,7 @@ class _ListingImagesState extends State<ListingImages> {
   }
 
   void removeUpload(int index) {
-    // add delete method to StorageService!!!
+    storage.deleteByUrl(urls[index]);
     setState(() {
       urls.removeAt(index);
     });

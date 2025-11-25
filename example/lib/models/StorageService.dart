@@ -3,8 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mime/mime.dart';
 
 class StorageService {
-  
-final FirebaseStorage _storage = FirebaseStorage.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future<String> upload(
     PlatformFile file, {
@@ -29,7 +28,7 @@ final FirebaseStorage _storage = FirebaseStorage.instance;
 
         switch (snapshot.state) {
           case TaskState.running:
-            break; 
+            break;
           case TaskState.paused:
             print("Upload paused.");
             break;
@@ -46,7 +45,6 @@ final FirebaseStorage _storage = FirebaseStorage.instance;
       });
 
       final snapshot = await uploadTask;
-
       final downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
     } on FirebaseException catch (e) {
@@ -66,4 +64,26 @@ final FirebaseStorage _storage = FirebaseStorage.instance;
     return result.files;
   }
 
+  Future<void> deleteByUrl(String downloadUrl) async {
+    try {
+      final ref = _storage.refFromURL(downloadUrl);
+      await ref.delete();
+    } on FirebaseException catch (e) {
+      throw Exception('Delete failed: ${e.code} ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error during delete: $e');
+    }
+  }
+
+  Future<void> deleteByPath(String path) async {
+    try {
+      final ref = _storage.ref().child(path);
+      await ref.delete();
+    } on FirebaseException catch (e) {
+      throw Exception('Delete failed: ${e.code} ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error during delete: $e');
+    }
+  }
 }
+
