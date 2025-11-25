@@ -1,4 +1,4 @@
-import 'package:example/pages/AuthenticationService.dart';
+import 'package:example/models/AuthenticationService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

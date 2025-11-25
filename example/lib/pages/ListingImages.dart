@@ -1,4 +1,5 @@
-import 'package:example/pages/StorageService.dart';
+import 'package:example/components/imageList.dart';
+import 'package:example/models/StorageService.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class _ListingImagesState extends State<ListingImages> {
   double width = 0;
   double height = 0;
   List<PlatformFile> selectedFiles = [];
-  bool isUploading = false;
+  bool isUploading = true;
   String uploadingFile = "";
   List<String> uploaded = [];
   List<String> urls = [];
@@ -30,6 +31,13 @@ class _ListingImagesState extends State<ListingImages> {
     });
   }
 
+  void removeUpload(int index) {
+    // add delete method to StorageService!!!
+    setState(() {
+      urls.removeAt(index);
+    });
+  }
+ 
    @override
   void initState() {
     super.initState();
@@ -73,7 +81,9 @@ class _ListingImagesState extends State<ListingImages> {
           ),
         ],
       ),
-      child: Padding(padding: padding, child: Column(
+      child: Padding(padding: padding, 
+      child: isUploading ?
+      Column(
       children: [
         Expanded(
           child: Padding(
@@ -127,6 +137,7 @@ class _ListingImagesState extends State<ListingImages> {
                       selectedFiles.addAll(files);
                     });
                   } catch (e) {
+                    print(e);
                   }
                 },
                 icon: const Icon(Icons.insert_drive_file),
@@ -158,11 +169,11 @@ class _ListingImagesState extends State<ListingImages> {
                           } on FirebaseException catch (e) {
                             if (!context.mounted) return;
                           }
-                          widget.onUploadComplete(urls);
-                          setState(() {
+                        }
+                        widget.onUploadComplete(urls);
+                        setState(() {
                             isUploading = false;
                           });
-                        }
                       },
                 child: const Text("Upload Files"),
               ),
@@ -170,7 +181,7 @@ class _ListingImagesState extends State<ListingImages> {
           ],
         ),
       ],
-    ),
+    ) : ImageListView(imageUrls: urls, onTrash: removeUpload),
     ),
     );
   }

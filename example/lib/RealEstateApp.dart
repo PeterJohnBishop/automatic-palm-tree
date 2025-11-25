@@ -4,6 +4,7 @@ import 'package:example/components/MainDrawer.dart';
 import 'package:example/components/NavTextButton.dart';
 import 'package:example/contact.dart';
 import 'package:example/home.dart';
+import 'package:example/pages/authSwitcher.dart';
 import 'package:example/properties.dart';
 import 'package:example/sellers.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _RealEstateAppState extends State<RealEstateApp> {
     "sellers",
     "about",
     "contact",
+    "agents"
   ];
 
   void _goTo(int index) {
@@ -42,7 +44,9 @@ class _RealEstateAppState extends State<RealEstateApp> {
             ? '/sellers'
             : index == 4
             ? '/about'
-            : '/contact',
+            : index == 5 
+            ? '/contact'
+            : '/agents',
       );
     });
   }
@@ -122,6 +126,9 @@ class _RealEstateAppState extends State<RealEstateApp> {
                       break;
                     case '/contact':
                       page = ContactPage();
+                      break;
+                    case '/agents':
+                      page = AuthSwitcher();
                       break;
 
                     default:

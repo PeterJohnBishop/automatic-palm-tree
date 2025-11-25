@@ -1,3 +1,4 @@
+import 'package:example/pages/email.dart';
 import 'package:flutter/material.dart';
 
 class ContactPage extends StatefulWidget {
@@ -11,7 +12,7 @@ class _ContactPageState extends State<ContactPage> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text("Contact Page - Under Construction"),
+      child: EmailForm(),
     );
   }
 }

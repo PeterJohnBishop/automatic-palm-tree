@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:example/pages/AuthenticationService.dart';
-import 'package:example/pages/UserDocumentService.dart';
-import 'package:example/pages/StorageService.dart';
-import 'package:example/pages/circularImagePicker.dart';
+import 'package:example/models/AuthenticationService.dart';
+import 'package:example/models/UserDocumentService.dart';
+import 'package:example/models/StorageService.dart';
+import 'package:example/components/circularImagePicker.dart';
 import 'package:flutter/material.dart';
 
 class CreateUser extends StatefulWidget {

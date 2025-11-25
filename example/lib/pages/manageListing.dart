@@ -1,9 +1,9 @@
-import 'package:example/pages/AuthenticationService.dart';
-import 'package:example/pages/ListingDocumentService.dart';
+import 'package:example/models/AuthenticationService.dart';
+import 'package:example/models/ListingDocumentService.dart';
 import 'package:example/pages/ListingCover.dart';
 import 'package:example/pages/ListingDetails.dart';
 import 'package:example/pages/ListingImages.dart';
-import 'package:example/pages/StorageService.dart';
+import 'package:example/models/StorageService.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
