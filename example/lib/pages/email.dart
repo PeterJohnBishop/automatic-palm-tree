@@ -176,6 +176,8 @@ class _EmailFormState extends State<EmailForm> {
                     const SizedBox(height: 24),
 
                     SubmitEmailButton(
+                      alias: "RealEstate Demo",
+                      sender: "realestate@@peterjohnbishop.com",
                       name: _nameTextController.text,
                       email: _emailTextController.text,
                       subject: _subjectTextController.text,

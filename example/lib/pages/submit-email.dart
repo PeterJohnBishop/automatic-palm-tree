@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class SubmitEmailButton extends StatefulWidget {
+  final String alias;
+  final String sender;
   final String name;
   final String email;
   final String subject;
@@ -10,6 +12,8 @@ class SubmitEmailButton extends StatefulWidget {
 
   const SubmitEmailButton({
     super.key,
+    required this.alias,
+    required this.sender,
     required this.name,
     required this.email,
     required this.subject,
@@ -22,6 +26,8 @@ class SubmitEmailButton extends StatefulWidget {
 
 class _SubmitEmailButtonState extends State<SubmitEmailButton> {
   var _isHovering = false;
+  late String alias;
+  late String sender;
   late String name;
   late String email;
   late String subject;
@@ -30,13 +36,17 @@ class _SubmitEmailButtonState extends State<SubmitEmailButton> {
   String responseMessage = '';
 
   Future<void> sendEmail() async {
+    String formattedSubject = "${subject} - ${name}";
+    List<String> formattedRecipients = [email, "pjb.den@gmail.com"];
+
     const url = 'https://example.com/api/data'; 
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
-      'name': name, 
-      'email': email, 
-      'subject': subject, 
-      'message': message
+      'alias': alias,
+      'sender': sender,
+      'recipients': formattedRecipients, 
+      'subject': formattedSubject, 
+      'html': message
     });
 
     try {
@@ -67,6 +77,7 @@ class _SubmitEmailButtonState extends State<SubmitEmailButton> {
   @override
   void initState() {
     super.initState();
+    alias = widget.alias;
     name = widget.name;
     email = widget.email;
     subject = widget.subject;

@@ -17,7 +17,6 @@ class ImageListView extends StatefulWidget {
 
 class _ImageListViewState extends State<ImageListView> {
   final Map<String, bool> _orientationCache = {};
-
   final Map<int, bool> _hovered = {};
 
   @override

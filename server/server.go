@@ -68,8 +68,7 @@ func ServeGin() {
 		}
 	}
 
-	AddDProtectedRoutes(r)
-
+	AddEmailRoutes(r, appServices.ResendClient)
 	log.Println("Now serving Gin.")
 	r.Run(":8080")
 }

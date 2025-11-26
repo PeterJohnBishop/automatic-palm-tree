@@ -5,12 +5,20 @@ import (
 	"github.com/resend/resend-go/v2"
 )
 
-func SendURLViaResend(client *resend.Client) gin.HandlerFunc {
+func SendEmailHandler(client *resend.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
-	}
-}
+		var email resend.SendEmailRequest
+		if err := c.ShouldBindJSON(&email); err != nil {
+			c.JSON(400, gin.H{"error": "Invalid request body"})
+			return
+		}
 
-func SendQRViaResend(client *resend.Client) gin.HandlerFunc {
-	return func(c *gin.Context) {
+		_, err := client.Emails.Send(&email)
+		if err != nil {
+			c.JSON(500, gin.H{"error": "Failed to send email"})
+			return
+		}
+
+		c.JSON(200, gin.H{"message": "Email sent successfully"})
 	}
 }

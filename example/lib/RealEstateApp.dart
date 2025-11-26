@@ -64,13 +64,16 @@ class _RealEstateAppState extends State<RealEstateApp> {
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: width < 600,
-            backgroundColor: Colors.white,
-            title: const Text('PETER J BISHOP'),
+            backgroundColor: Colors.black,
+            title: const Text('PETER J BISHOP', style: TextStyle(
+              color: Colors.white
+            ),),
             leading: isWide
                 ? null
                 : Builder(
                     builder: (context) {
                       return IconButton(
+                        color: Colors.white,
                         icon: const Icon(Icons.menu),
                         onPressed: () {
                           Scaffold.of(context).openDrawer();

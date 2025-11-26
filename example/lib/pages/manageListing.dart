@@ -143,111 +143,134 @@ class _EditListingState extends State<EditListing> {
       builder: (context, constraints) {
         final width = constraints.maxWidth;
         final height = constraints.maxHeight;
+        var isWide = width > height;
 
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
+        return SafeArea(
+          top: true,
+          left: false,
+          right: false,
+          bottom: false,
+          child: SingleChildScrollView(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Column(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start, // IMPORTANT
                   children: [
-                    Padding(
-                      padding: EdgeInsets.all(8),
-                      child: ListingCover(
-                        width: width,
-                        height: height,
-                        imageUrl: _cover,
-                        onUploadPressed: _saveCover,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(8),
-                      child: ListingImages(
-                        width: width,
-                        height: height,
-                        onUploadComplete: _saveImages,
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8),
-                      child: ListingDetails(
-                        width: width,
-                        height: height,
-                        onSave: _saveDetails,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                _coverUploaded && _assetsUploaded && _detailsSaved
-                    ? MouseRegion(
-                        onEnter: (_) => setState(() => _isHovering = true),
-                        onExit: (_) => setState(() => _isHovering = false),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: _isHovering
-                                ? Colors.black
-                                : Colors.grey,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 14,
-                              horizontal: 32,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(8),
+                          child: ListingCover(
+                            width: width,
+                            height: height,
+                            imageUrl: _cover,
+                            onUploadPressed: _saveCover,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8),
+                          child: ListingImages(
+                            width: width,
+                            height: height,
+                            onUploadComplete: _saveImages,
+                          ),
+                        ),
+                        if (!isWide)
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: ListingDetails(
+                              width: width,
+                              height: height,
+                              onSave: _saveDetails,
                             ),
                           ),
-                          onPressed: () async {
-                            final currentUser =
-                                AuthenticationService().currentUser;
-                            if (currentUser != null) {
-                              _agent = currentUser.email!;
-                            }
-                            final listing = ListingDocument(
-                              id: "",
-                              agent: _agent,
-                              address1: _address1,
-                              address2: _address2,
-                              price: _price,
-                              status: _status,
-                              beds: _beds,
-                              baths: _baths,
-                              sqft: _sqft,
-                              liked: [],
-                              loved: [],
-                              comments: [],
-                              description: _description,
-                              cover: _cover,
-                              assets: _assets,
-                              dateCreated: DateTime.now(),
-                              dateUpdated: DateTime.now(),
-                            );
-                            try {
-                              finalListing = await ListingDocumentService()
-                                  .createListing(listing);
-                            } on FirebaseException catch (e) {
-                              if (!context.mounted) return;
-                              _showErrorDialog(
-                                context,
-                                e.message ?? "Authentication failed.",
+                      ],
+                    ),
+                    if (isWide)
+                      Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: ListingDetails(
+                              width: width,
+                              height: height,
+                              onSave: _saveDetails,
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 32),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (_coverUploaded && _assetsUploaded && _detailsSaved)
+                        MouseRegion(
+                          onEnter: (_) => setState(() => _isHovering = true),
+                          onExit: (_) => setState(() => _isHovering = false),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: _isHovering
+                                  ? Colors.black
+                                  : Colors.grey,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 14,
+                                horizontal: 32,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final currentUser =
+                                  AuthenticationService().currentUser;
+                              if (currentUser != null) {
+                                _agent = currentUser.email!;
+                              }
+                              final listing = ListingDocument(
+                                id: "",
+                                agent: _agent,
+                                address1: _address1,
+                                address2: _address2,
+                                price: _price,
+                                status: _status,
+                                beds: _beds,
+                                baths: _baths,
+                                sqft: _sqft,
+                                liked: [],
+                                loved: [],
+                                comments: [],
+                                description: _description,
+                                cover: _cover,
+                                assets: _assets,
+                                dateCreated: DateTime.now(),
+                                dateUpdated: DateTime.now(),
                               );
-                            }
-                          },
-                          child: Text("Save"),
+                              try {
+                                finalListing = await ListingDocumentService()
+                                    .createListing(listing);
+                              } on FirebaseException catch (e) {
+                                if (!context.mounted) return;
+                                _showErrorDialog(
+                                  context,
+                                  e.message ?? "Authentication failed.",
+                                );
+                              }
+                            },
+                            child: Text("Save"),
+                          ),
                         ),
-                      )
-                    : SizedBox(), // add preview and cancel options
+                    ],
+                  ),
+                ),
               ],
             ),
-          ],
+          ),
         );
       },
     );

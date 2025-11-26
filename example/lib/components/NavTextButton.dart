@@ -24,7 +24,7 @@ class _NavTextButtonState extends State<NavTextButton> {
 
   Color get _textColor {
     if (_isPressed || widget.isSelected || _isHovered) {
-      return Colors.black;
+      return Colors.white;
     }
     return Colors.grey[600]!;
   }
