@@ -30,7 +30,7 @@ class _HoverIconButtonState extends State<HoverIconButton> {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            color: _isHovered ? Colors.grey.shade200 : Colors.transparent,
+            color: _isHovered ? Colors.white : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -38,7 +38,7 @@ class _HoverIconButtonState extends State<HoverIconButton> {
             children: [
               Icon(
                 widget.icon,
-                color:  _isHovered ? Colors.black87 : Colors.grey,
+                color:  _isHovered ? Colors.black87 : Colors.white,
               ),
               AnimatedSize(
                 duration: const Duration(milliseconds: 200),

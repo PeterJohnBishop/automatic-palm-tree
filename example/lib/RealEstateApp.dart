@@ -7,6 +7,7 @@ import 'package:example/home.dart';
 import 'package:example/pages/authSwitcher.dart';
 import 'package:example/properties.dart';
 import 'package:example/sellers.dart';
+import 'package:example/stats.dart';
 import 'package:flutter/material.dart';
 
 class RealEstateApp extends StatefulWidget {
@@ -26,7 +27,7 @@ class _RealEstateAppState extends State<RealEstateApp> {
     "sellers",
     "about",
     "contact",
-    "agents"
+    "agents",
   ];
 
   void _goTo(int index) {
@@ -44,7 +45,7 @@ class _RealEstateAppState extends State<RealEstateApp> {
             ? '/sellers'
             : index == 4
             ? '/about'
-            : index == 5 
+            : index == 5
             ? '/contact'
             : '/agents',
       );
@@ -65,9 +66,10 @@ class _RealEstateAppState extends State<RealEstateApp> {
           appBar: AppBar(
             automaticallyImplyLeading: width < 600,
             backgroundColor: Colors.black,
-            title: const Text('PETER J BISHOP', style: TextStyle(
-              color: Colors.white
-            ),),
+            title: const Text(
+              'PETER J BISHOP',
+              style: TextStyle(color: Colors.white),
+            ),
             leading: isWide
                 ? null
                 : Builder(
@@ -119,7 +121,19 @@ class _RealEstateAppState extends State<RealEstateApp> {
                       page = PropertiesPage();
                       break;
                     case '/buyers':
-                      page = BuyersPage();
+                      page = isWide
+                          ? Row(
+                              children: [
+                                Expanded(child: StatsPage()),
+                                Expanded(child: BuyersPage()),
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                Expanded(child: StatsPage()),
+                                Expanded(child: BuyersPage()),
+                              ],
+                            );
                       break;
                     case '/sellers':
                       page = SellersPage();
@@ -141,20 +155,18 @@ class _RealEstateAppState extends State<RealEstateApp> {
                   return MaterialPageRoute(builder: (_) => page);
                 },
               ),
-
-              Positioned(
-                top: 40,
-                right: 20,
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  color: Colors.black45,
-                  child: Text(
-                    'Overlay Widget',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
             ],
+          ),
+          bottomNavigationBar: BottomAppBar(
+            color: Colors.black,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                '© 2024 Peter J Bishop. All rights reserved.',
+                style: TextStyle(color: Colors.white70),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
         );
       },
